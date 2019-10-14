@@ -18,5 +18,26 @@ public:
 
 // Add your implementation below this line. Do not add or modify anything above this line.
 
+template<typename T>
+OULinkedListEnumerator<T>::OULinkedListEnumerator(OULink<T>* first) {
+}
+
+template<typename T>
+bool OULinkedListEnumerator<T>::hasNext() const {
+	return false;
+}
+
+// throws ExceptionEnumerationBeyondEnd if no next item is available
+template<typename T>
+T OULinkedListEnumerator<T>::next() {
+	return T();
+}
+
+// throws ExceptionEnumerationBeyondEnd if no next item is available
+template<typename T>
+T OULinkedListEnumerator<T>::peek() const {
+	return T();
+}
 
 #endif // !OU_LINKED_LIST_ENUMERATOR
+

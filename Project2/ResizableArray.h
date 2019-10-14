@@ -221,6 +221,12 @@ T ResizableArray<T> :: operator[](unsigned long index) const {
 	return data[index];
 }
 
+// removes all items from array, resets to default capacity, set size to 0
+template<typename T>
+void ResizableArray<T>::clear() {
+
+}
+
 template<typename T>
 unsigned long ResizableArray<T> :: getSize() const {
 	// Returns the size

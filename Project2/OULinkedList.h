@@ -66,5 +66,96 @@ public:
 
 // Add your implementation below this line. Do not add or modify anything above this line.
 
+// creates empty linked list with comparator
+template <typename T>
+OULinkedList<T> :: OULinkedList(Comparator<T>* comparator) {
+
+}
+
+// deletes all links and their data items
+template <typename T>
+OULinkedList<T> :: ~OULinkedList() {
+
+}
+
+// if an equivalent item is not already present, insert item in order and return true
+// if an equivalent item is already present, leave list unchanged and return false
+template <typename T>
+bool OULinkedList<T> :: insert(T item) {
+
+}
+
+// if item is greater than item at last, append item at end and return true
+// if item is less than or equal to item at last, leave list unchanged and return false
+template <typename T>
+bool OULinkedList<T> :: append(T item) {
+
+}
+
+// if an equivalent item is already present, replace item and return true
+// if an equivalent item is not already present, leave list unchanged and return false
+template <typename T>
+bool OULinkedList<T> :: replace(T item) {
+
+}
+
+// if an equivalent item is already present, remove item and return true
+// if an equivalent item is not already present, leave list unchanged and return false
+template <typename T>
+bool OULinkedList<T> :: remove(T item) {
+
+}
+
+// if any items are present, return a copy of the first item
+// if no items are present, throw new ExceptionLinkedListAccess
+template <typename T>
+T OULinkedList<T> :: getFirst() const {
+
+}
+
+// if any items are present, return a copy of the first item, remove it from list
+// if no items are present, throw new ExceptionLinkedListAccess
+template <typename T>
+T OULinkedList<T> :: pullFirst()[
+
+]
+
+// if any items are present, remove the first item and return true
+// if no items are present, leave list unchanged and return false
+template <typename T>
+bool OULinkedList<T> :: removeFirst() {
+
+}
+
+// if an equivalent item is present, return true
+// if an equivalent item is not present, false
+template <typename T>
+bool OULinkedList<T> :: contains(T item) const {
+
+}
+
+// if an equivalent item is present, return a copy of that item
+// if an equivalent item is not present, throw a new ExceptionLinkedListAccess
+template <typename T>
+T OULinkedList<T> :: find(T item) const {
+
+}
+
+// deletes all links in the list, resets size to 0
+template <typename T>
+void OULinkedList<T> :: clear() {
+}
+
+// returns the current number of items in the list
+template <typename T>
+unsigned long OULinkedList<T> :: getSize() const {
+
+}
+
+// create an enumerator for this linked list
+template <typename T>
+OULinkedListEnumerator<T> OULinkedList<T> :: enumerator() const {
+
+}
 
 #endif // !OU_LINKED_LIST
