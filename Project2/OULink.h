@@ -17,15 +17,14 @@ public:
 
 // Add your implementation below this line. Do not add or modify anything above this line.
 
-
-#endif // !OU_LINK
-
 template<typename T>
 OULink<T>::OULink(T item) {
-
+	data = item;
 }
 
 template<typename T>
 OULink<T>::~OULink() {
-
+	delete data;
 }
+
+#endif // !OU_LINK

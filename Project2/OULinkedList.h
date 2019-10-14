@@ -69,93 +69,247 @@ public:
 // creates empty linked list with comparator
 template <typename T>
 OULinkedList<T> :: OULinkedList(Comparator<T>* comparator) {
-
+	this->comparator = comparator;
 }
 
 // deletes all links and their data items
 template <typename T>
 OULinkedList<T> :: ~OULinkedList() {
+	delete comparator;
+	size = 0;
+	first = NULL;
+	last = NULL;
+
 
 }
+
+// TODO: for all account for case where replacing first item
 
 // if an equivalent item is not already present, insert item in order and return true
 // if an equivalent item is already present, leave list unchanged and return false
 template <typename T>
 bool OULinkedList<T> :: insert(T item) {
+	if (first == NULL) {
+		first = item;
+		last = item;
+		item->next = NULL;
+		size++;
+		return true;
+	}
+	OULink<T>* link = first;
+	OULINK<T>* prev = NULL;
+	while (!(link->next == NULL) {
+		if ((comparator->compare(item, link) == 0)) {
+			return false;
+		}
+		else if ((comparator->compare(item, link) > 0)) {
+			prev->next = item;
+			item->next = link;
+			size++;
+			return true;
+		}
 
+		prev = link;
+		link = link->next;
+	}
+	link->next = item;
+	item->next = NULL;
+	last = item;
+	size++;
+	return true;
 }
 
 // if item is greater than item at last, append item at end and return true
 // if item is less than or equal to item at last, leave list unchanged and return false
 template <typename T>
 bool OULinkedList<T> :: append(T item) {
+	if (first == NULL) {
+		first = item;
+		last = item;
+		item->next = NULL;
+		size++;
+		return true;
+	}
 
+	OULink<T>* link = first;
+	OULINK<T>* prev = NULL;
+	
+	if (comparator->compare(item, last) > 0) {
+		last->next = item;
+		last = item;
+		item->next = NULL;
+		size++;
+		return true;
+	}
+
+	return false;
 }
 
 // if an equivalent item is already present, replace item and return true
 // if an equivalent item is not already present, leave list unchanged and return false
 template <typename T>
 bool OULinkedList<T> :: replace(T item) {
+	if (first == NULL) {
+		return false;
+	}
 
+	OULink<T>* link = first;
+	OULINK<T>* prev = NULL;
+
+	while (!(link->next == NULL) {
+		if ((comparator->compare(item, link) == 0)) {
+			prev->next = item;
+			item->next = link->next;
+			delete link;
+			return true;
+		}
+
+		prev = link;
+		link = link->next;
+	}
+
+	return false;
 }
 
 // if an equivalent item is already present, remove item and return true
 // if an equivalent item is not already present, leave list unchanged and return false
 template <typename T>
 bool OULinkedList<T> :: remove(T item) {
+	if (first == NULL) {
+		return false;
+	}
 
+	OULink<T>* link = first;
+	OULINK<T>* prev = NULL;
+
+	while (!(link->next == NULL) {
+		if ((comparator->compare(item, link) == 0)) {
+			prev->next = link->next;
+			delete link;
+			size--;
+			return true;
+		}
+
+		prev = link;
+		link = link->next;
+	}
+
+	return false;
 }
 
 // if any items are present, return a copy of the first item
 // if no items are present, throw new ExceptionLinkedListAccess
 template <typename T>
 T OULinkedList<T> :: getFirst() const {
+	if (first == NULL) {
+		throw ExceptionLinkedListAccess;
+	}
 
+	return first;
 }
 
 // if any items are present, return a copy of the first item, remove it from list
 // if no items are present, throw new ExceptionLinkedListAccess
 template <typename T>
-T OULinkedList<T> :: pullFirst()[
+T OULinkedList<T> ::pullFirst() {
+	if (first == NULL) {
+		throw ExceptionLinkedListAccess;
+	}
 
-]
+	OULink<T>* temp = first;
+	delete first;
+	first = temp->next;
+	size--;
+
+	return temp;
+}
 
 // if any items are present, remove the first item and return true
 // if no items are present, leave list unchanged and return false
 template <typename T>
 bool OULinkedList<T> :: removeFirst() {
+	if (first == NULL) {
+		return false;
+	}
 
+	OULink<T>* temp = first;
+	delete first;
+	first = temp->next;
+	size--;
+
+	return true;
 }
 
 // if an equivalent item is present, return true
 // if an equivalent item is not present, false
 template <typename T>
 bool OULinkedList<T> :: contains(T item) const {
+	if (first == NULL) {
+		return false;
+	}
 
+	OULink<T>* link = first;
+
+	while (!(link->next == NULL) {
+		if ((comparator->compare(item, link) == 0)) {
+			return true;
+		}
+
+		prev = link;
+		link = link->next;
+	}
+
+	return false;
 }
 
 // if an equivalent item is present, return a copy of that item
 // if an equivalent item is not present, throw a new ExceptionLinkedListAccess
 template <typename T>
 T OULinkedList<T> :: find(T item) const {
+	if (first == NULL) {
+		throw ExceptionLinkedListAccess;
+	}
 
+	OULink<T>* link = first;
+
+	while (!(link->next == NULL) {
+		if ((comparator->compare(item, link) == 0)) {
+			return link;
+		}
+
+		prev = link;
+		link = link->next;
+	}
+
+	throw ExceptionLinkedListAccess;
 }
 
 // deletes all links in the list, resets size to 0
 template <typename T>
 void OULinkedList<T> :: clear() {
+	OULink<T> link = first;
+	OULink<T> temp = first->next;
+
+	// TODO: Figure this out
+	while (!(temp == NULL)) {
+		temp = temp->next;
+		delete link;
+	}
+	size = 0;
+
+	return;
 }
 
 // returns the current number of items in the list
 template <typename T>
 unsigned long OULinkedList<T> :: getSize() const {
-
+	return size;
 }
 
 // create an enumerator for this linked list
 template <typename T>
 OULinkedListEnumerator<T> OULinkedList<T> :: enumerator() const {
-
+	return new OULinkedListEnumerator(first);
 }
 
 #endif // !OU_LINKED_LIST
