@@ -143,6 +143,7 @@
   <ItemGroup>
     <Text Include="File1.txt" />
     <Text Include="File2.txt" />
+    <Text Include="TODO.txt" />
     <Text Include="valid_data_practice.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

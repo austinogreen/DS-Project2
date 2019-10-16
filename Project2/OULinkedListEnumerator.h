@@ -27,7 +27,7 @@ OULinkedListEnumerator<T>::OULinkedListEnumerator(OULink<T>* first) {
 template<typename T>
 bool OULinkedListEnumerator<T>::hasNext() const {
 	// Returns false if next is null
-	if (current->next == null) {
+	if (current->next == NULL) {
 		return false;
 	}
 
@@ -42,7 +42,7 @@ T OULinkedListEnumerator<T>::next() {
 		throw ExceptionEnumerationBeyondEnd;
 	}
 
-	T temp* = current;
+	T temp = current;
 	
 	current = current->next;
 

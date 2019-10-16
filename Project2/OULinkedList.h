@@ -83,8 +83,6 @@ OULinkedList<T> :: ~OULinkedList() {
 
 }
 
-// TODO: for all account for case where replacing first item
-
 // if an equivalent item is not already present, insert item in order and return true
 // if an equivalent item is already present, leave list unchanged and return false
 template <typename T>
@@ -96,23 +94,23 @@ bool OULinkedList<T> :: insert(T item) {
 		size++;
 		return true;
 	}
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 	OULINK<T>* prev = NULL;
-	while (!(link->next == NULL) {
-		if ((comparator->compare(item, link) == 0)) {
+	while (!(current->next == NULL) {
+		if ((comparator->compare(item, current) == 0)) {
 			return false;
 		}
-		else if ((comparator->compare(item, link) > 0)) {
+		else if ((comparator->compare(item, current) > 0)) {
 			prev->next = item;
-			item->next = link;
+			item->next = current;
 			size++;
 			return true;
 		}
 
-		prev = link;
-		link = link->next;
+		prev = current;
+		current = current->next;
 	}
-	link->next = item;
+	current->next = item;
 	item->next = NULL;
 	last = item;
 	size++;
@@ -131,7 +129,7 @@ bool OULinkedList<T> :: append(T item) {
 		return true;
 	}
 
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 	OULINK<T>* prev = NULL;
 	
 	if (comparator->compare(item, last) > 0) {
@@ -153,19 +151,19 @@ bool OULinkedList<T> :: replace(T item) {
 		return false;
 	}
 
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 	OULINK<T>* prev = NULL;
 
-	while (!(link->next == NULL) {
-		if ((comparator->compare(item, link) == 0)) {
+	while (!(current->next == NULL) {
+		if ((comparator->compare(item, current) == 0)) {
 			prev->next = item;
-			item->next = link->next;
-			delete link;
+			item->next = current->next;
+			delete current;
 			return true;
 		}
 
-		prev = link;
-		link = link->next;
+		prev = current;
+		current = current->next;
 	}
 
 	return false;
@@ -179,19 +177,19 @@ bool OULinkedList<T> :: remove(T item) {
 		return false;
 	}
 
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 	OULINK<T>* prev = NULL;
 
-	while (!(link->next == NULL) {
-		if ((comparator->compare(item, link) == 0)) {
-			prev->next = link->next;
-			delete link;
+	while (!(current->next == NULL) {
+		if ((comparator->compare(item, current) == 0)) {
+			prev->next = current->next;
+			delete current;
 			size--;
 			return true;
 		}
 
-		prev = link;
-		link = link->next;
+		prev = current;
+		current = current->next;
 	}
 
 	return false;
@@ -248,15 +246,15 @@ bool OULinkedList<T> :: contains(T item) const {
 		return false;
 	}
 
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 
-	while (!(link->next == NULL) {
-		if ((comparator->compare(item, link) == 0)) {
+	while (!(current->next == NULL) {
+		if ((comparator->compare(item, current) == 0)) {
 			return true;
 		}
 
-		prev = link;
-		link = link->next;
+		prev = current;
+		current = current->next;
 	}
 
 	return false;
@@ -270,15 +268,15 @@ T OULinkedList<T> :: find(T item) const {
 		throw ExceptionLinkedListAccess;
 	}
 
-	OULink<T>* link = first;
+	OULink<T>* current = first;
 
-	while (!(link->next == NULL) {
-		if ((comparator->compare(item, link) == 0)) {
-			return link;
+	while (!(current->next == NULL) {
+		if ((comparator->compare(item, current) == 0)) {
+			return current;
 		}
 
-		prev = link;
-		link = link->next;
+		prev = current;
+		current = current->next;
 	}
 
 	throw ExceptionLinkedListAccess;
@@ -287,15 +285,30 @@ T OULinkedList<T> :: find(T item) const {
 // deletes all links in the list, resets size to 0
 template <typename T>
 void OULinkedList<T> :: clear() {
-	OULink<T> link = first;
-	OULink<T> temp = first->next;
-
-	// TODO: Figure this out
-	while (!(temp == NULL)) {
-		temp = temp->next;
-		delete link;
+	if (first == NULL) {
+		size = 0;
+		return;
 	}
+
+	OULink<T> current = first;
+	OULink<T> temp;
+
+	// While a next item exists
+	while (!(current->next == NULL)) {
+		// Stores next item
+		temp = current->next;
+		// Deletes item
+		delete current;
+		// Stores next item in current
+		current = temp;
+	}
+
+	// Deletes remaining current
+	delete current;
+
 	size = 0;
+	first = NULL;
+	last = NULL;
 
 	return;
 }

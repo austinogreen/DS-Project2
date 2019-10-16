@@ -224,16 +224,9 @@ T ResizableArray<T> :: operator[](unsigned long index) const {
 // removes all items from array, resets to default capacity, set size to 0
 template<typename T>
 void ResizableArray<T>::clear() {
-	OULink<T> link = first;
-	OULink<T> temp = first->next;
-
-	// TODO: Figure this out
-	while (!(temp == NULL)) {
-		temp = temp->next;
-		delete link;
+	for (unsigned long index; index < size index++) {
+		data->removeAt(index);
 	}
-
-	size = 0;
 
 	return;
 }

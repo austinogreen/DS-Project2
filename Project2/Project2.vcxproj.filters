@@ -70,5 +70,8 @@
     <Text Include="valid_data_practice.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="TODO.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
