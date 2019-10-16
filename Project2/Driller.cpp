@@ -75,7 +75,10 @@ int main() {
 	int dataLines = 0;
 	int validEntries = 0;
 
+	// If a file has been opened, used for output later
 	bool hasOpened = false;
+	// If a file has data
+	bool hasData = false;
 
 	// Initial file name input
 	cout << "Enter data file name: ";
@@ -120,6 +123,7 @@ int main() {
 			while (!(inputFile.eof())) {
 				// preps the valid flag to true
 				isValid = true;
+				hasData = true;
 
 				// Check if date is the same
 				if (tempString.compare(date) != 0) {
@@ -184,16 +188,19 @@ int main() {
 				dataLines++;
 				
 				// TODO: ensure that the list is maintained in order based on time stamp
-			}
-			// TODO: If Driller 2.0 has trouble accessing the data file named by the user, it should provide the user with an appropriate error message (“File is not available.”)
-			
+			}			
 			// Close file
 			inputFile.close();
 
-			// Merge files
-			mergeDrillingRecords(tempArray);
+			if (!hasData) {
+				cout << "No valid records found." << endl;
+			}
+			else {
+				// Merge files
+				mergeDrillingRecords(tempArray);
 
-			delete tempArray;
+				delete tempArray;
+			}
 
 		}
 		else {
@@ -205,8 +212,9 @@ int main() {
 		cout << "Enter data file name: ";
 
 		getline(cin, fileName);
+		// Resets file having data flag to false
+		hasData = false;
 	}
-	// TODO: Similarly, if the file is available but no valid records are found in the file, Driller 2.0 will give an error message indicating that no valid data was found (“No valid records found.”) 
 	
 	// if there is a valid input
 	if (hasOpened) {
@@ -224,10 +232,8 @@ int main() {
 
 		// Temp Drilling Record
 		DrillingRecord* tempDR = new DrillingRecord();
-
-		// TODO: Menu: “Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit:"
 		
-		cout << "Enter (o)utput, (s)ort, (f)ind, or (q)uit: " << endl;
+		cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
 
 		cin >> choice;
 		getline(cin, temp);
@@ -373,6 +379,21 @@ int main() {
 				}
 
 				break;
+
+			case 'm':
+				// Todo: add merge case
+				break;
+
+			case 'p':
+				// Todo: add purge case
+				break;
+
+
+			case 'r':
+				// Todo: add record case
+				break;
+
+
 			}
 
 			cout << "Enter (o)utput, (s)ort, (f)ind, or (q)uit: " << endl;
