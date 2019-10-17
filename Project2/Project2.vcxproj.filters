@@ -74,4 +74,33 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="invalid_values_practice.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="invalid_values_practice2.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="random5.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_evens.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_odds.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_practice.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_practice2.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_unsorted.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="valid_data_unsorted_invalid.csv">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
