@@ -224,7 +224,7 @@ T ResizableArray<T> :: operator[](unsigned long index) const {
 // removes all items from array, resets to default capacity, set size to 0
 template<typename T>
 void ResizableArray<T>::clear() {
-	for (unsigned long index; index < size index++) {
+	for (unsigned long index; index < size; index++) {
 		data->removeAt(index);
 	}
 

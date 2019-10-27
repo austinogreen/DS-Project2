@@ -39,10 +39,10 @@ bool OULinkedListEnumerator<T>::hasNext() const {
 template<typename T>
 T OULinkedListEnumerator<T>::next() {
 	if (hasNext() == false) {
-		throw ExceptionEnumerationBeyondEnd;
+		throw ExceptionEnumerationBeyondEnd();
 	}
 
-	T temp = current;
+	T temp = current->data;
 	
 	current = current->next;
 
@@ -54,10 +54,10 @@ T OULinkedListEnumerator<T>::next() {
 template<typename T>
 T OULinkedListEnumerator<T>::peek() const {
 	if (hasNext() == false) {
-		throw ExceptionEnumerationBeyondEnd;
+		throw ExceptionEnumerationBeyondEnd();
 	}
 
-	return current;
+	return current->data;
 }
 
 #endif // !OU_LINKED_LIST_ENUMERATOR

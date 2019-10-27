@@ -1,3 +1,4 @@
 Driller
 Change to use linked list
 Any after running tests
+when going from list to array, change is sorted by column

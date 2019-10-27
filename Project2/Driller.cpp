@@ -246,6 +246,7 @@ OULinkedList<DrillingRecord>* readFile(string fileName) {
 	// File does not exist
 	else {
 		cout << "File is not available." << endl;
+		return NULL;
 	}
 }
 
@@ -261,6 +262,8 @@ void outputLoop(void) {
 		ofstream outputFile;
 		// Column the data is currently sorted by
 		int sortedColumn = 1;
+
+		OULinkedList<DrillingRecord>* tempList = NULL;
 
 		// comparator
 		DrillingRecordComparator* comparator;
@@ -362,7 +365,7 @@ void outputLoop(void) {
 
 					break;
 
-				case 'f':
+				case 'f': {
 					// Get column to search
 					cout << "Enter search field (0-17):" << endl;
 					cin >> column;
@@ -412,6 +415,7 @@ void outputLoop(void) {
 
 						cout << "Drilling records found: " << count << endl;
 					}
+				}
 
 					break;
 
@@ -420,7 +424,7 @@ void outputLoop(void) {
 
 					getline(cin, fileName);
 
-					OULinkedList<DrillingRecord>* tempList = readFile(fileName);
+					tempList = readFile(fileName);
 
 					if (tempList != NULL) {
 						mergeDrillingList(tempList);
@@ -433,7 +437,7 @@ void outputLoop(void) {
 
 					getline(cin, fileName);
 
-					OULinkedList<DrillingRecord>* tempList = readFile(fileName);
+					tempList = readFile(fileName);
 
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
