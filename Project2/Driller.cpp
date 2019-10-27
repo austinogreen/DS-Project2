@@ -11,6 +11,10 @@
 #include "Search.h"
 #include "Sorter.h"
 #include "Comparator.h"
+#include "OULink.h"
+#include "OULinkedList.h"
+#include "OULinkedListEnumerator.h"
+
 
 using namespace std;
 
@@ -18,6 +22,9 @@ ResizableArray<DrillingRecord>* drillingArray = NULL;
 
 // string to dump bad data
 string garbage;
+int dataLines = 0;
+int validEntries = 0;
+bool hasOpened = false;
 
 void mergeDrillingRecords(ResizableArray<DrillingRecord>* newArray) {
 	//Array dne therfore merged array is only array
@@ -64,158 +71,133 @@ void mergeDrillingRecords(ResizableArray<DrillingRecord>* newArray) {
 	Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
 }
 
-int main() {
-
-	// File name that the user wants to input
-	string fileName;
-	// File opener
+void readFile(string fileName) {
 	ifstream inputFile;
-
 	ResizableArray<DrillingRecord>* tempArray;
-	int dataLines = 0;
-	int validEntries = 0;
 
-	// If a file has been opened, used for output later
-	bool hasOpened = false;
-	// If a file has data
+	inputFile.open(fileName);
+
 	bool hasData = false;
 
-	// Initial file name input
-	cout << "Enter data file name: ";
+	// Check if file exists
+	if (inputFile.is_open()) {
+		// If file exists
+		hasOpened = true;
 
-	getline(cin, fileName);
+		// The drilling array
+		DrillingRecord* drillingRecord = new DrillingRecord();
 
-	while (!(fileName.empty())) {
+		// Temperary string variable
+		string tempString;
 
-		inputFile.open(fileName);
+		// Time array
+		string date;
 
-		// Check if file exists
-		if (inputFile.is_open()) {
-			// If file exists
-			hasOpened = true;
+		bool isValid;
 
-			// The drilling array
-			DrillingRecord* drillingRecord = new DrillingRecord();
+		// iterator
+		unsigned int i;
 
-			// Temperary string variable
-			string tempString;
+		int lineCount = 0;
 
-			// Time array
-			string date;
+		tempArray = new ResizableArray<DrillingRecord>();
 
-			bool isValid = true;
+		// Throws away first line
+		getline(inputFile, garbage);
 
-			// iterator
-			unsigned int i;
+		// Puts date in date variable
+		getline(inputFile, tempString, ',');
+		date = tempString;
 
-			int lineCount = 0;
+		// While not at end of file
+		while (!(inputFile.eof())) {
+			// preps the valid flag to true
+			isValid = true;
+			hasData = true;
 
-			tempArray = new ResizableArray<DrillingRecord>();
-			
-			// Throws away first line
-			getline(inputFile, garbage);
+			// Check if date is the same
+			if (tempString.compare(date) != 0) {
+				cout << "Non-matching date stamp " << tempString << " at line " << lineCount + 1 << "." << endl;
+				isValid = false;
+			}
+			if (isValid) {
+				drillingRecord->addString(tempString);
+			}
 
-			// Puts date in date variable
 			getline(inputFile, tempString, ',');
-			date = tempString;
+			// If data is still valid
+			if (isValid) {
 
-			// While not at end of file
-			while (!(inputFile.eof())) {
-				// preps the valid flag to true
-				isValid = true;
-				hasData = true;
+				drillingRecord->addString(tempString);
 
-				// Check if date is the same
-				if (tempString.compare(date) != 0) {
-					cout << "Non-matching date stamp " << tempString << " at line " << lineCount + 1 << "." << endl;
-					isValid = false;
-				}
-				if (isValid) {
-					drillingRecord->addString(tempString);
-				}
-
-				getline(inputFile, tempString, ',');
-				// If data is still valid
-				if (isValid) {
-
-					drillingRecord->addString(tempString);
-
-					// Itterate though time vector to check if time is equal to previous times
-					for (unsigned long i = 0; i < tempArray->getSize(); i++) {
-						if (tempArray->get(i).getString(1).compare(tempString) == 0) {
-							cout << "Duplicate timestamp " << tempString << " at line " << lineCount + 1 << "." << endl;
-							isValid = false;
-							break;
-						}
-					}
-				}
-
-				// puts data in data array
-				// gets first 15 data points that are separated by commas
-				for (i = 0; i < 15; i++) {
-					getline(inputFile, tempString, ',');
-
-					drillingRecord->addNum(stod(tempString));
-				}
-				// gets final data point with newline
-				getline(inputFile, tempString);
-				drillingRecord->addNum(stod(tempString));
-
-				// checks if data is valid
-				for (i = 0; i < 16; i++) {
-					if ((drillingRecord->getNum(i) <= 0) && isValid) {
-						cout << "Invalid floating-point data at line " << lineCount + 1 << "." << endl;
+				// Itterate though time vector to check if time is equal to previous times
+				for (unsigned long i = 0; i < tempArray->getSize(); i++) {
+					if (tempArray->get(i).getString(1).compare(tempString) == 0) {
+						cout << "Duplicate timestamp " << tempString << " at line " << lineCount + 1 << "." << endl;
 						isValid = false;
 						break;
 					}
 				}
+			}
 
-				// If valid, increment dataPoints and add object to array
-				if (isValid) {
-					validEntries++;
-					tempArray->add(*drillingRecord);
-				}
-				// If not valid, delete object and recreate it
-				else {
-					delete drillingRecord;
-					drillingRecord = new DrillingRecord();
-				}
-
-				// Get next date parameter
+			// puts data in data array
+			// gets first 15 data points that are separated by commas
+			for (i = 0; i < 15; i++) {
 				getline(inputFile, tempString, ',');
 
-				lineCount++;
-				dataLines++;
-				
-				// TODO: ensure that the list is maintained in order based on time stamp
-			}			
-			// Close file
-			inputFile.close();
-
-			if (!hasData) {
-				cout << "No valid records found." << endl;
+				drillingRecord->addNum(stod(tempString));
 			}
+			// gets final data point with newline
+			getline(inputFile, tempString);
+			drillingRecord->addNum(stod(tempString));
+
+			// checks if data is valid
+			for (i = 0; i < 16; i++) {
+				if ((drillingRecord->getNum(i) <= 0) && isValid) {
+					cout << "Invalid floating-point data at line " << lineCount + 1 << "." << endl;
+					isValid = false;
+					break;
+				}
+			}
+
+			// If valid, increment dataPoints and add object to array
+			if (isValid) {
+				validEntries++;
+				tempArray->add(*drillingRecord);
+			}
+			// If not valid, delete object and recreate it
 			else {
-				// Merge files
-				mergeDrillingRecords(tempArray);
-
-				delete tempArray;
+				delete drillingRecord;
+				drillingRecord = new DrillingRecord();
 			}
 
+			// Get next date parameter
+			getline(inputFile, tempString, ',');
+
+			lineCount++;
+			dataLines++;
+		}
+		// Close file
+		inputFile.close();
+
+		if (!hasData) {
+			cout << "No valid records found." << endl;
 		}
 		else {
-			// File does not exist
-			cout << "File is not available." << endl;
+			// Merge files
+			mergeDrillingRecords(tempArray);
+
+			delete tempArray;
 		}
 
-		// Re-get file name
-		cout << "Enter data file name: ";
-
-		getline(cin, fileName);
-		// Resets file having data flag to false
-		hasData = false;
 	}
-	
+	else {
+		// File does not exist
+		cout << "File is not available." << endl;
+	}
+}
+
+void outputLoop(void) {
 	// if there is a valid input
 	if (hasOpened) {
 
@@ -232,7 +214,7 @@ int main() {
 
 		// Temp Drilling Record
 		DrillingRecord* tempDR = new DrillingRecord();
-		
+
 		cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
 
 		cin >> choice;
@@ -256,7 +238,7 @@ int main() {
 
 						// Checks for file to output to
 						cout << "Enter output file name: ";
-						getline(inputFile, fileName);
+						getline(cin, fileName);
 
 						// open file
 						outputFile.open(fileName);
@@ -371,7 +353,7 @@ int main() {
 					}
 					else {
 						for (unsigned long i = 0; i < count; i++) {
-							cout << drillingArray->get((unsigned long) idxArray->get(i)) << endl;
+							cout << drillingArray->get((unsigned long)idxArray->get(i)) << endl;
 						}
 					}
 
@@ -381,26 +363,125 @@ int main() {
 				break;
 
 			case 'm':
-				// Todo: add merge case
+				string fileName;
+
+				cout << "Enter data file name: " << endl;
+
+				getline(cin, fileName);
+
+				readFile(fileName);
+
 				break;
 
 			case 'p':
-				// Todo: add purge case
+				string fileName;
+
+				cout << "Enter data file name: " << endl;
+
+				getline(cin, fileName);
+
 				break;
 
 
 			case 'r':
-				// Todo: add record case
-				break;
 
+				// Replace with enumerator by time
+
+				// Checks for file to output to
+				cout << "Enter output file name: ";
+				getline(cin, fileName);
+
+				// Output to chosen file
+				if (!(fileName.empty())) {
+					// open file
+					outputFile.open(fileName);
+
+					// Loops until valid file is entered
+					while (!(outputFile.is_open())) {
+						cout << "File is not available." << endl;
+
+						// Checks for file to output to
+						cout << "Enter output file name: ";
+						getline(cin, fileName);
+
+						// open file
+						outputFile.open(fileName);
+					}
+
+					try {
+						for (long unsigned int i = 0; i < drillingArray->getSize(); i++) {
+							outputFile << drillingArray->get(i) << endl;
+						}
+
+						// Outputs internal tallies
+						outputFile << "Data lines read: " << dataLines
+							<< "; Valid drilling records read: " << validEntries
+							<< "; Drilling records in memory: " << drillingArray->getSize()
+							<< endl;
+
+						outputFile.close();
+					}
+					catch (ExceptionIndexOutOfRange e) {
+						// It broke :(
+					}
+				}
+
+				else {
+					// Prints data (loop)
+					try {
+						for (long unsigned int i = 0; i < drillingArray->getSize(); i++) {
+							cout << drillingArray->get(i) << endl;
+						}
+
+						// Outputs internal tallies
+						cout << "Data lines read: " << dataLines
+							<< "; Valid drilling records read: " << validEntries
+							<< "; Drilling records in memory: " << drillingArray->getSize()
+							<< endl;
+					}
+					catch (ExceptionIndexOutOfRange e) {
+						// It broke :(
+					}
+				}
+				break;
 
 			}
 
-			cout << "Enter (o)utput, (s)ort, (f)ind, or (q)uit: " << endl;
+			cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
 			cin >> choice;
 			getline(cin, garbage);
 		}
-		cout << "Thanks for using Driller." << endl;
-		return 0;
 	}
+}
+
+int main() {
+
+	// File name that the user wants to input
+	string fileName;
+
+	// If a file has been opened, used for output later
+	bool hasOpened = false;
+
+	// Initial file name input
+	cout << "Enter data file name: ";
+
+	getline(cin, fileName);
+
+	// Input loop
+	while (!(fileName.empty())) {
+
+		readFile(fileName);
+
+		// Re-get file name
+		cout << "Enter data file name: ";
+
+		getline(cin, fileName);
+	}
+
+	// Goes into the user output loop
+	outputLoop();
+	
+	
+	cout << "Thanks for using Driller." << endl;
+	return 0;
 }
