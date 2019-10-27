@@ -75,48 +75,55 @@ void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
 // The biggest desision here is whether or not to assume more that more items already exist in the list or not
 // This method assumes that there will be more new items in the list than not
 void mergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
-	OULinkedListEnumerator<DrillingRecord>* enumerator = new OULinkedListEnumerator<DrillingRecord>(new OULink<DrillingRecord>(tempList->getFirst()));
+	OULinkedListEnumerator<DrillingRecord> enumerator = tempList->enumerator();
 
 	bool hasInserted = false;
 
 	// While there is a next item
-	while (enumerator->hasNext()) {
+	while (enumerator.hasNext()) {
 		// Try to insert an item
 		// Returns false if item already inserted
-		hasInserted = drillingList->insert(enumerator->peek());
+		hasInserted = drillingList->insert(enumerator.peek());
 		// If the item wasn't inserted it already exists
 		// Then replace
 		if (!hasInserted) {
-			drillingList->replace(enumerator->next());
+			drillingList->replace(enumerator.next());
 		}
 		// Go to next item
 		else {
-			enumerator->next();
+			enumerator.next();
 		}
 	}
 	return;
 }
 
 void pergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
-	OULinkedListEnumerator<DrillingRecord>* enumerator = new OULinkedListEnumerator<DrillingRecord>(new OULink<DrillingRecord>(drillingList->getFirst()));
+	OULinkedListEnumerator<DrillingRecord> enumerator = tempList->enumerator();
 
 	// While there is a next item
-	while (enumerator->hasNext()) {
+	while (enumerator.hasNext()) {
 		
 		// Removes item from Drilling List
-		drillingList->remove((enumerator->next()));
+		drillingList->remove((enumerator.next()));
 
 	}
 	return;
 }
 
 void listToArray() {
-	OULinkedListEnumerator<DrillingRecord>* enumerator = new OULinkedListEnumerator<DrillingRecord>(new OULink<DrillingRecord>(drillingList->getFirst()));
-	drillingArray = new ResizableArray<DrillingRecord>;
+
+	drillingArray = new ResizableArray<DrillingRecord>();
+
+	// Doesn't have any items
+	if (drillingList->getSize() == 0) {
+		return;
+	}
+
+	OULinkedListEnumerator<DrillingRecord> enumerator = drillingList->enumerator();
 
 	// While there is a next item
-	while (enumerator->hasNext()) {
-		drillingArray->add(enumerator->next());
+	while (enumerator.hasNext()) {
+		drillingArray->add(enumerator.next());
 	}
 
 	return;
@@ -457,7 +464,7 @@ void outputLoop(void) {
 
 				case 'r':
 
-					// Replace with enumerator by time
+					OULinkedListEnumerator<DrillingRecord> enumerator = drillingList->enumerator();
 
 					// Checks for file to output to
 					cout << "Enter output file name: ";
@@ -481,14 +488,14 @@ void outputLoop(void) {
 						}
 
 						try {
-							for (long unsigned int i = 0; i < drillingArray->getSize(); i++) {
-								outputFile << drillingArray->get(i) << endl;
+							while (enumerator.hasNext()) {
+								outputFile << enumerator.next() << endl;
 							}
 
 							// Outputs internal tallies
 							outputFile << "Data lines read: " << dataLines
 								<< "; Valid drilling records read: " << validEntries
-								<< "; Drilling records in memory: " << drillingArray->getSize()
+								<< "; Drilling records in memory: " << drillingList->getSize()
 								<< endl;
 
 							outputFile.close();
@@ -501,14 +508,14 @@ void outputLoop(void) {
 					else {
 						// Prints data (loop)
 						try {
-							for (long unsigned int i = 0; i < drillingArray->getSize(); i++) {
-								cout << drillingArray->get(i) << endl;
+							while (enumerator.hasNext()) {
+								cout << enumerator.next() << endl;
 							}
 
 							// Outputs internal tallies
 							cout << "Data lines read: " << dataLines
 								<< "; Valid drilling records read: " << validEntries
-								<< "; Drilling records in memory: " << drillingArray->getSize()
+								<< "; Drilling records in memory: " << drillingList->getSize()
 								<< endl;
 						}
 						catch (ExceptionIndexOutOfRange e) {
