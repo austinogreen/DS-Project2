@@ -271,6 +271,8 @@ void outputLoop(void) {
 		// Temp Drilling Record
 		DrillingRecord* tempDR = new DrillingRecord();
 
+		listToArray();
+
 		cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
 
 		cin >> choice;
@@ -430,6 +432,10 @@ void outputLoop(void) {
 						mergeDrillingList(tempList);
 					}
 
+					// Since changes have been made to list, need to repopulate the array
+					listToArray();
+					sortedColumn = 1;
+
 					break;
 
 				case 'p':
@@ -442,6 +448,10 @@ void outputLoop(void) {
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
 					}
+
+					// Since changes have been made to list, need to repopulate the array
+					listToArray();
+					sortedColumn = 1;
 
 					break;
 
