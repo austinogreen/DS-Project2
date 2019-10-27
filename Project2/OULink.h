@@ -7,7 +7,7 @@ class OULink {
 	friend class OULinkedList;
 	template <typename U>
 	friend class OULinkedListEnumerator;
-	private
+private:
 	T data{};                  // data item of any type
 	OULink* next = NULL;       // pointer to next link
 public:
