@@ -18,7 +18,8 @@
 
 using namespace std;
 
-ResizableArray<DrillingRecord>* drillingArray = NULL;
+ResizableArray<DrillingRecord*>* drillingArray = NULL;
+OULinkedList<OULink<DrillingRecord*>*>* drillingList = new OULinkedList<OULink<DrillingRecord*>*>(new DrillingRecordComparator(1));
 
 // string to dump bad data
 string garbage;
@@ -26,10 +27,10 @@ int dataLines = 0;
 int validEntries = 0;
 bool hasOpened = false;
 
-void mergeDrillingRecords(ResizableArray<DrillingRecord>* newArray) {
+void mergeDrillingArray(ResizableArray<DrillingRecord*>* newArray) {
 	//Array dne therfore merged array is only array
 	if (drillingArray == NULL) {
-		drillingArray = new ResizableArray<DrillingRecord>();
+		drillingArray = new ResizableArray<DrillingRecord*>();
 
 		unsigned long size = newArray->getSize();
 		for (unsigned int i = 0; i < size; i++) {
@@ -71,9 +72,51 @@ void mergeDrillingRecords(ResizableArray<DrillingRecord>* newArray) {
 	Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
 }
 
-void readFile(string fileName) {
+// The biggest desision here is whether or not to assume more that more items already exist in the list or not
+// This method assumes that there will be more new items in the list than not
+void mergeDrillingList(OULinkedList<OULink<DrillingRecord*>*>* tempList) {
+	OULinkedListEnumerator<OULink<DrillingRecord*>*>* enumerator = OULinkedListEnumerator<OULink<DrillingRecord*>*>(tempList->getFirst());
+
+	bool hasInserted = false;
+
+	// While there is a next item
+	while (enumerator->hasNext()) {
+		// Try to insert an item
+		// Returns false if item already inserted
+		hasInserted = drillingList->insert(enumerator->peek());
+		// If the item wasn't inserted it already exists
+		// Then replace
+		if (!hasInserted) {
+			drillingList->replace(enumerator->next());
+		}
+		// Go to next item
+		else {
+			enumerator->next();
+		}
+	}
+	return;
+}
+
+void listToArray() {
+	OULinkedListEnumerator<DrillingRecord*> enumerator = OULinkedListEnumerator<DrillingRecord*>(drillingList->getFirst());
+
+	// While there is a next item
+	while (enumerator.hasNext()) {
+		drillingArray->add(enumerator.next());
+	}
+	return;
+}
+
+OULinkedList<OULink<DrillingRecord*>*>* readFile(string fileName) {
 	ifstream inputFile;
-	ResizableArray<DrillingRecord>* tempArray;
+
+	// Compares by column
+	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
+
+	OULink<DrillingRecord*>* drLink;
+
+	OULinkedList<OULink<DrillingRecord*>*>* tempList;
+	tempList = new OULinkedList<OULink<DrillingRecord*>*>(comparator);
 
 	inputFile.open(fileName);
 
@@ -99,8 +142,6 @@ void readFile(string fileName) {
 		unsigned int i;
 
 		int lineCount = 0;
-
-		tempArray = new ResizableArray<DrillingRecord>();
 
 		// Throws away first line
 		getline(inputFile, garbage);
@@ -163,7 +204,8 @@ void readFile(string fileName) {
 			// If valid, increment dataPoints and add object to array
 			if (isValid) {
 				validEntries++;
-				tempArray->add(*drillingRecord);
+				drLink = new OULink<DrillingRecord*>(drillingRecord);
+				tempList->insert(drLink);
 			}
 			// If not valid, delete object and recreate it
 			else {
@@ -180,19 +222,20 @@ void readFile(string fileName) {
 		// Close file
 		inputFile.close();
 
+		// Linked List is Empty
 		if (!hasData) {
 			cout << "No valid records found." << endl;
+			return NULL;
 		}
+		// Return Linked List
 		else {
-			// Merge files
-			mergeDrillingRecords(tempArray);
-
-			delete tempArray;
+			return tempList;
 		}
 
 	}
+
+	// File does not exist
 	else {
-		// File does not exist
 		cout << "File is not available." << endl;
 	}
 }
@@ -369,7 +412,11 @@ void outputLoop(void) {
 
 				getline(cin, fileName);
 
-				readFile(fileName);
+				OULinkedList<OULink<DrillingRecord*>*>* tempList = readFile(fileName);
+
+				if (tempList != NULL) {
+					mergeDrillingList(tempList);
+				}
 
 				break;
 
@@ -459,6 +506,8 @@ int main() {
 	// File name that the user wants to input
 	string fileName;
 
+	OULinkedList<OULink<DrillingRecord*>*>* tempList = NULL;
+
 	// If a file has been opened, used for output later
 	bool hasOpened = false;
 
@@ -470,8 +519,12 @@ int main() {
 	// Input loop
 	while (!(fileName.empty())) {
 
-		readFile(fileName);
+		tempList = readFile(fileName);
 
+		if (tempList != NULL) {
+			mergeDrillingList(tempList);
+		}
+		
 		// Re-get file name
 		cout << "Enter data file name: ";
 
