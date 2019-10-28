@@ -74,13 +74,13 @@ void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
 
 // The biggest desision here is whether or not to assume more that more items already exist in the list or not
 // This method assumes that there will be more new items in the list than not
-void mergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
-	OULinkedListEnumerator<DrillingRecord> enumerator = tempList->enumerator();
+void mergeDrillingList(OULinkedList<DrillingRecord>* mergeList) {
+	OULinkedListEnumerator<DrillingRecord> enumerator = mergeList->enumerator();
 
 	bool hasInserted = false;
 
 	// if empty exit
-	if (tempList->getSize() == 0) {
+	if (mergeList->getSize() == 0) {
 		return;
 	}
 
@@ -112,15 +112,19 @@ void mergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
 	return;
 }
 
-void pergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
-	OULinkedListEnumerator<DrillingRecord> enumerator = tempList->enumerator();
+void pergeDrillingList(OULinkedList<DrillingRecord>* pergeList) {
+	OULinkedListEnumerator<DrillingRecord> enumerator = pergeList->enumerator();
 
 	// While there is a next item
 	while (enumerator.hasNext()) {
-		
-		// Removes item from Drilling List
-		drillingList->remove((enumerator.next()));
 
+		// Removes item from Drilling List
+		drillingList->remove(enumerator.next());
+
+	}
+
+	if (pergeList->getSize() != 0) {
+		drillingList->remove(enumerator.next());
 	}
 	return;
 }
@@ -373,6 +377,11 @@ void outputLoop(void) {
 					cin >> column;
 					getline(cin, garbage);
 
+					// if there is no data, break
+					if (drillingArray->getSize() == 0) {
+						break;
+					}
+
 					// Make sure to check if valid
 					if ((column < 0) && (column > 17)) {
 
@@ -506,22 +515,28 @@ void outputLoop(void) {
 						}
 
 						try {
+							// Drilling List has nothing to display
+							if (drillingList->getSize() == 0) {
+								// Outputs internal tallies
+								outputFile << "Data lines read: " << dataLines
+									<< "; Valid drilling records read: " << validEntries
+									<< "; Drilling records in memory: " << drillingList->getSize()
+									<< endl;
+								break;
+							}
+
 							while (enumerator.hasNext()) {
 								outputFile << enumerator.next() << endl;
 							}
 
-							// If there are any items, print remaining one after while loop
-							if (drillingList->getSize() != 0) {
-								outputFile << enumerator.next() << endl;
-							}
+							// Output last line
+							outputFile << enumerator.next() << endl;
 
 							// Outputs internal tallies
 							outputFile << "Data lines read: " << dataLines
 								<< "; Valid drilling records read: " << validEntries
 								<< "; Drilling records in memory: " << drillingList->getSize()
 								<< endl;
-
-							outputFile.close();
 						}
 						catch (ExceptionIndexOutOfRange e) {
 							// It broke :(
@@ -531,14 +546,21 @@ void outputLoop(void) {
 					else {
 						// Prints data (loop)
 						try {
+							// Drilling List has nothing to display
+							if (drillingList->getSize() == 0) {
+								// Outputs internal tallies
+								cout << "Data lines read: " << dataLines
+									<< "; Valid drilling records read: " << validEntries
+									<< "; Drilling records in memory: " << drillingList->getSize()
+									<< endl;
+								break;
+							}
 							while (enumerator.hasNext()) {
 								cout << enumerator.next() << endl;
 							}
 
-							// If there are any items, print remaining one after while loop
-							if (drillingList->getSize() != 0) {
-								cout << enumerator.next() << endl;
-							}
+							// Output last line
+							cout << enumerator.next() << endl;
 
 							// Outputs internal tallies
 							cout << "Data lines read: " << dataLines

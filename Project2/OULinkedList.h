@@ -196,7 +196,7 @@ bool OULinkedList<T> :: replace(T item) {
 template <typename T>
 bool OULinkedList<T> :: remove(T item) {
 
-	OULink<T>* temp = new OULink<T>(item); // Temp item
+	OULink<T>* temp; // Temp item
 
 	if (first == NULL) {
 		return false;
@@ -208,7 +208,7 @@ bool OULinkedList<T> :: remove(T item) {
 		first = temp;
 		size--;
 		// if the first item in NULL the last one should be too
-		if (first = NULL) {
+		if (first == NULL) {
 			delete last;
 			last = NULL;
 		}
