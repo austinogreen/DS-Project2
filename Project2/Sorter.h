@@ -16,6 +16,7 @@ public:
     static void sort(ResizableArray<T>& array, const Comparator<T>& comparator);
 };
 
+// Base sorting algorithm
 template<typename T>
 void Sorter<T> :: sort(ResizableArray<T>& array, const Comparator<T>& comparator) {
 	
@@ -23,11 +24,13 @@ void Sorter<T> :: sort(ResizableArray<T>& array, const Comparator<T>& comparator
 	unsigned long left = 0;
 	unsigned long right = array.getSize() - 1;
    
+// Calls quicksort
    quickSort(array, left, right, comparator);
    
    return;
 }
 
+// Quicksort per Zybooks
 template<typename T>
 void Sorter<T> :: quickSort(ResizableArray<T>& array, unsigned long left, unsigned long right, const Comparator<T>& comparator) {
    
@@ -47,6 +50,7 @@ void Sorter<T> :: quickSort(ResizableArray<T>& array, unsigned long left, unsign
 	return;
 }
 
+// Partition function per zybooks
 template<typename T>
 unsigned long Sorter<T> :: partition(ResizableArray<T>& array, unsigned long i, unsigned long k, const Comparator<T>& comparator) {
    // Initialize variables

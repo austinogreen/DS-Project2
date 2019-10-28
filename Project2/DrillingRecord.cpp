@@ -3,11 +3,14 @@
 #include "Exceptions.h"
 
 std::ostream& operator<<(std::ostream& os, const DrillingRecord& record) {
+	// Outputs data according to project
 	os << record.getString(0) + ";";
 	os << record.getString(1) + ";";
+
+	// sets precision to 2 decimal with fixed decimal
 	os << std::fixed;
 	os << std::setprecision(2);
-
+	// Ouputs numbers
 	for (int i = 0; i < 15; i++) {
 		os << record.getNum(i) << ";";
 	}
@@ -28,11 +31,14 @@ DrillingRecord::DrillingRecord() {
 }
 
 void DrillingRecord::addNum(double num) {
+	// adds number into array
 	nums[numCtr] = num;
+	// if numCtr is at 15, wrap
 	if (numCtr == 15) {
 
 		numCtr = 0;
 	}
+	// Adds to numCtr
 	else {
 		numCtr++;
 	}
@@ -40,10 +46,13 @@ void DrillingRecord::addNum(double num) {
 }
 
 void DrillingRecord::addString(std::string string) {
+	// adds string into array
 	strings[strCtr] = string;
+	// add 1
 	if (strCtr == 0) {
 		strCtr++;
 	}
+	// if strCtr is at 1, wrap to zero
 	else {
 		strCtr = 0;
 	}
@@ -51,6 +60,7 @@ void DrillingRecord::addString(std::string string) {
 }
 
 double DrillingRecord::getNum(unsigned int index) const {
+	// out of range
 	if (index > 15) {
 		throw ExceptionIndexOutOfRange();
 	}
@@ -58,6 +68,7 @@ double DrillingRecord::getNum(unsigned int index) const {
 }
 
 std::string DrillingRecord::getString(unsigned int index) const {
+	// out of range
 	if (index > 1) {
 		throw ExceptionIndexOutOfRange();
 	}
@@ -65,6 +76,7 @@ std::string DrillingRecord::getString(unsigned int index) const {
 }
 
 void DrillingRecord::setNum (double num, unsigned int index) {
+	// out of range
 	if (index > 15) {
 		throw ExceptionIndexOutOfRange();
 	}
@@ -74,6 +86,7 @@ void DrillingRecord::setNum (double num, unsigned int index) {
 }
 
 void DrillingRecord::setString(std::string string, unsigned int index) {
+	// out of range
 	if (index > 1) {
 		throw ExceptionIndexOutOfRange();
 	}

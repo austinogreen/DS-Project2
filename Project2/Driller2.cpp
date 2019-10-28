@@ -505,11 +505,11 @@ void outputLoop(void) {
 
 					if (tempList != NULL) {
 						mergeDrillingList(tempList);
-					}
 
-					// Since changes have been made to list, need to repopulate the array
-					listToArray();
-					sortedColumn = 1;
+						// Since changes have been made to list, need to repopulate the array
+						listToArray();
+						sortedColumn = 1;
+					}
 
 					break;
 
@@ -519,11 +519,11 @@ void outputLoop(void) {
 
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
-					}
 
-					// Since changes have been made to list, need to repopulate the array
-					listToArray();
-					sortedColumn = 1;
+						// Since changes have been made to list, need to repopulate the array
+						listToArray();
+						sortedColumn = 1;
+					}
 
 					break;
 

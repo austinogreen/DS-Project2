@@ -24,6 +24,7 @@ OULink<T>::OULink(T item) {
 
 template<typename T>
 OULink<T>::~OULink() {
+	// Deletes the next item to deallocate mem
 	delete next;
 }
 
