@@ -176,7 +176,7 @@ bool OULinkedList<T> :: replace(T item) {
 		return true;
 	}
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			prev->next = ouLink;
 			ouLink->next = current->next;
@@ -291,7 +291,7 @@ bool OULinkedList<T> :: contains(T item) const {
 
 	OULink<T>* current = first; // current item
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			return true;
 		}
@@ -311,14 +311,11 @@ T OULinkedList<T> :: find(T item) const {
 	}
 
 	OULink<T>* current = first;
-	OULink<T>* prev = new OULink<T>(item); // temp item
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			return current->data;
 		}
-
-		prev = current;
 		current = current->next;
 	}
 
@@ -337,7 +334,7 @@ void OULinkedList<T> :: clear() {
 	OULink<T> temp;
 
 	// While a next item exists
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		// Stores next item
 		temp = current->next;
 		// Deletes item

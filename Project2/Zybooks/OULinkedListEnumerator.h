@@ -27,7 +27,7 @@ OULinkedListEnumerator<T>::OULinkedListEnumerator(OULink<T>* first) {
 template<typename T>
 bool OULinkedListEnumerator<T>::hasNext() const {
 	// Returns false if next is null
-	if (current->next == NULL) {
+	if (current == NULL) {
 		return false;
 	}
 

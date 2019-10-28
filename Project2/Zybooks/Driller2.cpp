@@ -97,18 +97,6 @@ void mergeDrillingList(OULinkedList<DrillingRecord>* mergeList) {
 		}
 	}
 
-	// Last item
-	DrillingRecord tempDR = enumerator.next();
-
-	// Try to insert an item
-	// Returns false if item already inserted
-	hasInserted = drillingList->insert(tempDR);
-	// If the item wasn't inserted it already exists
-	// Then replace
-	if (!hasInserted) {
-		drillingList->replace(tempDR);
-	}
-
 	return;
 }
 
@@ -121,10 +109,6 @@ void pergeDrillingList(OULinkedList<DrillingRecord>* pergeList) {
 		// Removes item from Drilling List
 		drillingList->remove(enumerator.next());
 
-	}
-
-	if (pergeList->getSize() != 0) {
-		drillingList->remove(enumerator.next());
 	}
 	return;
 }
@@ -145,20 +129,26 @@ void listToArray() {
 		drillingArray->add(enumerator.next());
 	}
 
-	// Last Item
-	drillingArray->add(enumerator.next());
-
 	return;
 }
 
-OULinkedList<DrillingRecord>* readFile(string fileName) {
+OULinkedList<DrillingRecord>* readFile() {
 	ifstream inputFile;
+
+	// File name that the user wants to input
+	string fileName;
 
 	// Compares by column
 	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
 
 	OULinkedList<DrillingRecord>* tempList;
 	tempList = new OULinkedList<DrillingRecord>(comparator);
+
+
+	// Initial file name input
+	cout << "Enter data file name: ";
+
+	getline(cin, fileName);
 
 	inputFile.open(fileName);
 
@@ -274,7 +264,10 @@ OULinkedList<DrillingRecord>* readFile(string fileName) {
 
 	// File does not exist
 	else {
-		cout << "File is not available." << endl;
+		if (!fileName.empty()) {
+			cout << "File is not available." << endl;
+			return readFile();
+		}
 		return NULL;
 	}
 }
@@ -302,7 +295,7 @@ void outputLoop(void) {
 
 		listToArray();
 
-		cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
+		cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: ";
 
 		cin >> choice;
 		getline(cin, temp);
@@ -338,7 +331,7 @@ void outputLoop(void) {
 
 							// Outputs internal tallies
 							outputFile << "Data lines read: " << dataLines
-								<< "; Valid drilling records read: " << validEntries
+								<< "; Valid Drilling records read: " << validEntries
 								<< "; Drilling records in memory: " << drillingArray->getSize()
 								<< endl;
 
@@ -358,7 +351,7 @@ void outputLoop(void) {
 
 							// Outputs internal tallies
 							cout << "Data lines read: " << dataLines
-								<< "; Valid drilling records read: " << validEntries
+								<< "; Valid Drilling records read: " << validEntries
 								<< "; Drilling records in memory: " << drillingArray->getSize()
 								<< endl;
 						}
@@ -403,7 +396,7 @@ void outputLoop(void) {
 
 				case 'f': {
 					// Get column to search
-					cout << "Enter search field (0-17):" << endl;
+					cout << "Enter search field (0-17): ";
 					cin >> column;
 					getline(cin, garbage);
 
@@ -421,14 +414,14 @@ void outputLoop(void) {
 						if ((column >= 2) && (column <= 17)) {
 							// Get value to sort
 							double value;
-							cout << "Enter positive field value: " << endl;
+							cout << "Enter positive field value: ";
 							cin >> value;
 							getline(cin, garbage);
 							tempDR->setNum(value, column - 2);
 						}
 						else if ((column == 0) || (column == 1)) {
 							string value;
-							cout << "Enter exact text on which to search: " << endl;
+							cout << "Enter exact text on which to search: ";
 							getline(cin, value);
 							tempDR->setString(value, column);
 						}
@@ -449,18 +442,15 @@ void outputLoop(void) {
 							}
 						}
 
-						cout << "Drilling records found: " << count << endl;
+						cout << "Drilling records found: " << count << "." << endl;
 					}
 				}
 
 					break;
 
 				case 'm':
-					cout << "Enter data file name: ";
 
-					getline(cin, fileName);
-
-					tempList = readFile(fileName);
+					tempList = readFile();
 
 					if (tempList != NULL) {
 						mergeDrillingList(tempList);
@@ -473,11 +463,8 @@ void outputLoop(void) {
 					break;
 
 				case 'p':
-					cout << "Enter data file name: ";
 
-					getline(cin, fileName);
-
-					tempList = readFile(fileName);
+					tempList = readFile();
 
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
@@ -519,7 +506,7 @@ void outputLoop(void) {
 							if (drillingList->getSize() == 0) {
 								// Outputs internal tallies
 								outputFile << "Data lines read: " << dataLines
-									<< "; Valid drilling records read: " << validEntries
+									<< "; Valid Drilling records read: " << validEntries
 									<< "; Drilling records in memory: " << drillingList->getSize()
 									<< endl;
 								break;
@@ -529,12 +516,9 @@ void outputLoop(void) {
 								outputFile << enumerator.next() << endl;
 							}
 
-							// Output last line
-							outputFile << enumerator.next() << endl;
-
 							// Outputs internal tallies
 							outputFile << "Data lines read: " << dataLines
-								<< "; Valid drilling records read: " << validEntries
+								<< "; Valid Drilling records read: " << validEntries
 								<< "; Drilling records in memory: " << drillingList->getSize()
 								<< endl;
 						}
@@ -550,7 +534,7 @@ void outputLoop(void) {
 							if (drillingList->getSize() == 0) {
 								// Outputs internal tallies
 								cout << "Data lines read: " << dataLines
-									<< "; Valid drilling records read: " << validEntries
+									<< "; Valid Drilling records read: " << validEntries
 									<< "; Drilling records in memory: " << drillingList->getSize()
 									<< endl;
 								break;
@@ -559,12 +543,9 @@ void outputLoop(void) {
 								cout << enumerator.next() << endl;
 							}
 
-							// Output last line
-							cout << enumerator.next() << endl;
-
 							// Outputs internal tallies
 							cout << "Data lines read: " << dataLines
-								<< "; Valid drilling records read: " << validEntries
+								<< "; Valid Drilling records read: " << validEntries
 								<< "; Drilling records in memory: " << drillingList->getSize()
 								<< endl;
 						}
@@ -576,7 +557,7 @@ void outputLoop(void) {
 
 			}
 
-			cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
+			cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: ";
 				cin >> choice;
 			getline(cin, garbage);
 		}
@@ -585,36 +566,19 @@ void outputLoop(void) {
 
 int main() {
 
-	// File name that the user wants to input
-	string fileName;
-
 	OULinkedList<DrillingRecord>* tempList = NULL;
 
+	tempList = readFile();
 
-	// Initial file name input
-	cout << "Enter data file name: ";
-
-	getline(cin, fileName);
-
-	// Input loop
-	while (!(fileName.empty())) {
-
-		tempList = readFile(fileName);
-
-		if (tempList != NULL) {
-			mergeDrillingList(tempList);
-		}
-		
-		// Re-get file name
-		cout << "Enter data file name: ";
-
-		getline(cin, fileName);
+	if (tempList != NULL) {
+		mergeDrillingList(tempList);
 	}
 
 	// Goes into the user output loop
 	outputLoop();
 	
-	
-	cout << "Thanks for using Driller." << endl;
+	if (hasOpened) {
+		cout << "Thanks for using Driller." << endl;
+	}
 	return 0;
 }

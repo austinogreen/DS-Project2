@@ -78,8 +78,6 @@ OULinkedList<T> :: ~OULinkedList() {
 	size = 0;
 	first = NULL;
 	last = NULL;
-
-
 }
 
 // if an equivalent item is not already present, insert item in order and return true
@@ -176,7 +174,7 @@ bool OULinkedList<T> :: replace(T item) {
 		return true;
 	}
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			prev->next = ouLink;
 			ouLink->next = current->next;
@@ -285,13 +283,9 @@ bool OULinkedList<T> :: removeFirst() {
 template <typename T>
 bool OULinkedList<T> :: contains(T item) const {
 
-	if (first == NULL) {
-		return false;
-	}
-
 	OULink<T>* current = first; // current item
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			return true;
 		}
@@ -306,19 +300,12 @@ bool OULinkedList<T> :: contains(T item) const {
 template <typename T>
 T OULinkedList<T> :: find(T item) const {
 
-	if (first == NULL) {
-		throw ExceptionLinkedListAccess();
-	}
-
 	OULink<T>* current = first;
-	OULink<T>* prev = new OULink<T>(item); // temp item
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			return current->data;
 		}
-
-		prev = current;
 		current = current->next;
 	}
 
@@ -337,7 +324,7 @@ void OULinkedList<T> :: clear() {
 	OULink<T> temp;
 
 	// While a next item exists
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		// Stores next item
 		temp = current->next;
 		// Deletes item
