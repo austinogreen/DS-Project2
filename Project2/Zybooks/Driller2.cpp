@@ -590,8 +590,6 @@ int main() {
 
 	OULinkedList<DrillingRecord>* tempList = NULL;
 
-	// If a file has been opened, used for output later
-	bool hasOpened = false;
 
 	// Initial file name input
 	cout << "Enter data file name: ";

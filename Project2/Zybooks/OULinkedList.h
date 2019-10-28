@@ -75,7 +75,6 @@ OULinkedList<T> :: OULinkedList(Comparator<T>* comparator) {
 // deletes all links and their data items
 template <typename T>
 OULinkedList<T> :: ~OULinkedList() {
-	delete comparator;
 	size = 0;
 	first = NULL;
 	last = NULL;
@@ -131,6 +130,7 @@ bool OULinkedList<T> :: insert(T item) {
 		size++;
 		return true;
 	}
+	return false;
 }
 
 // if item is greater than item at last, append item at end and return true
@@ -285,21 +285,16 @@ bool OULinkedList<T> :: removeFirst() {
 template <typename T>
 bool OULinkedList<T> :: contains(T item) const {
 
-	OULink<T>* ouLink = new OULink<T>(item);
-
 	if (first == NULL) {
 		return false;
 	}
 
-	OULink<T>* current = first;
-	OULink<T>* prev = new OULink<T>(item); // temp item
+	OULink<T>* current = first; // current item
 
 	while (!(current->next == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			return true;
 		}
-
-		prev = current;
 		current = current->next;
 	}
 
