@@ -89,7 +89,7 @@ bool OULinkedList<T> :: insert(T item) {
 	OULink<T>* ouLink = new OULink<T>(item);
 
 	if (ouLink == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	if (first == NULL) {
@@ -145,7 +145,7 @@ bool OULinkedList<T> :: append(T item) {
 	OULink<T>* ouLink = new OULink<T>(item);
 
 	if (ouLink == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	if (first == NULL) {
@@ -176,7 +176,7 @@ bool OULinkedList<T> :: replace(T item) {
 	OULink<T>* ouLink = new OULink<T>(item);
 
 	if (ouLink == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	OULink<T>* current = first;
@@ -194,6 +194,7 @@ bool OULinkedList<T> :: replace(T item) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			prev->next = ouLink;
 			ouLink->next = current->next;
+			current->next = NULL;
 			delete current;
 			current = NULL;
 			return true;
@@ -235,12 +236,13 @@ bool OULinkedList<T> :: remove(T item) {
 	OULink<T>* prev = new OULink<T>(item); // temp item
 
 	if (prev == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			prev->next = current->next;
+			current->next = NULL;
 			delete current;
 			current = NULL;
 			// If the next item is null, prev is the last item
@@ -263,7 +265,7 @@ bool OULinkedList<T> :: remove(T item) {
 template <typename T>
 T OULinkedList<T> :: getFirst() const {
 	if (first == NULL) {
-		throw ExceptionLinkedListAccess();
+		throw new ExceptionLinkedListAccess();
 	}
 
 	return first->data;
@@ -274,7 +276,7 @@ T OULinkedList<T> :: getFirst() const {
 template <typename T>
 T OULinkedList<T> ::pullFirst() {
 	if (first == NULL) {
-		throw ExceptionLinkedListAccess();
+		throw new ExceptionLinkedListAccess();
 	}
 
 	OULink<T>* temp = first;
@@ -334,7 +336,7 @@ T OULinkedList<T> :: find(T item) const {
 		current = current->next;
 	}
 
-	throw ExceptionLinkedListAccess();
+	throw new ExceptionLinkedListAccess();
 }
 
 // deletes all links in the list, resets size to 0

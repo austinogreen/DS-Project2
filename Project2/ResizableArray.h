@@ -38,7 +38,7 @@ void ResizableArray<T> :: doubleCapacity(void) {
 
 	// Checks if memeory is available	
 	if (newT == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	// Copies contents of old array into the new one
@@ -68,7 +68,7 @@ void ResizableArray<T> :: halveCapacity(void) {
 
 	// Checks if memeory is available	
 	if (newT == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	// Copies contents of old array into the new one
@@ -97,7 +97,7 @@ ResizableArray<T> :: ResizableArray() {
 	data = new T[DEFAULT_ARRAY_CAPACITY];
 	// Checks if memeory is available	
 	if (data == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 }
@@ -108,7 +108,7 @@ ResizableArray<T> :: ResizableArray(unsigned long capacity) {
 	data = new T[capacity];
 	// Checks if memeory is available	
 	if (data == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 }
 
@@ -142,7 +142,7 @@ void ResizableArray<T> :: addAt(T item, unsigned long index) {
 	// Checks if index is valid
 	if (index >= size) {
 		// error
-		throw ExceptionIndexOutOfRange();
+		throw new ExceptionIndexOutOfRange();
 	}
 
 	// Shifts all data to the right
@@ -163,7 +163,7 @@ void ResizableArray<T> :: replaceAt(T item, unsigned long index) {
 	// Checks if index is valid
 	if (index >= size) {
 		// error
-		throw ExceptionIndexOutOfRange();
+		throw new ExceptionIndexOutOfRange();
 	}
 
 	// Replaces item at index with <item>
@@ -177,7 +177,7 @@ inline void ResizableArray<T> :: removeAt(unsigned long index) {
 	// Checks if index is valid
 	if (index >= size) {
 		// error
-		throw ExceptionIndexOutOfRange();
+		throw new ExceptionIndexOutOfRange();
 	}
 
 	// Creates new array
@@ -185,7 +185,7 @@ inline void ResizableArray<T> :: removeAt(unsigned long index) {
 
 	// Checks if memeory is available	
 	if (temp == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	// Creates an offset for the array
@@ -223,7 +223,7 @@ T ResizableArray<T> :: get(unsigned long index) const {
 	// Checks if index is valid
 	if (index >= size) {
 		// return
-		throw ExceptionIndexOutOfRange();
+		throw new ExceptionIndexOutOfRange();
 	}
 
 	// Returns the item
@@ -235,7 +235,7 @@ T ResizableArray<T> :: operator[](unsigned long index) const {
 	// Checks if index is valid
 	if (index >= size) {
 		// return
-		throw ExceptionIndexOutOfRange();
+		throw new ExceptionIndexOutOfRange();
 	}
 
 	// Returns the item

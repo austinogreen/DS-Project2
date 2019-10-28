@@ -84,7 +84,7 @@ void listToArray() {
 	drillingArray = new ResizableArray<DrillingRecord>();
 
 	if (drillingArray == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	// Doesn't have any items
@@ -114,13 +114,13 @@ OULinkedList<DrillingRecord>* readFile() {
 	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
 
 	if (comparator == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	OULinkedList<DrillingRecord>* tempList = new OULinkedList<DrillingRecord>(comparator);
 	
 	if (tempList == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 
@@ -141,7 +141,7 @@ OULinkedList<DrillingRecord>* readFile() {
 		DrillingRecord* drillingRecord = new DrillingRecord();
 
 		if (drillingRecord== NULL) {
-			throw ExceptionMemoryNotAvailable();
+			throw new ExceptionMemoryNotAvailable();
 		}
 
 		// Temperary string variable
@@ -223,7 +223,7 @@ OULinkedList<DrillingRecord>* readFile() {
 				drillingRecord = new DrillingRecord();
 
 				if (drillingRecord == NULL) {
-					throw ExceptionMemoryNotAvailable();
+					throw new ExceptionMemoryNotAvailable();
 				}
 			}
 
@@ -280,7 +280,7 @@ void outputLoop(void) {
 		DrillingRecord* tempDR = new DrillingRecord();
 
 		if (tempDR == NULL) {
-			throw ExceptionMemoryNotAvailable();
+			throw new ExceptionMemoryNotAvailable();
 		}
 
 		listToArray();
@@ -378,7 +378,7 @@ void outputLoop(void) {
 						comparator = new DrillingRecordComparator(column);
 
 						if (comparator == NULL) {
-							throw ExceptionMemoryNotAvailable();
+							throw new ExceptionMemoryNotAvailable();
 						}
 
 						Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
@@ -423,7 +423,7 @@ void outputLoop(void) {
 						comparator = new DrillingRecordComparator(column);
 
 						if (comparator == NULL) {
-							throw ExceptionMemoryNotAvailable();
+							throw new ExceptionMemoryNotAvailable();
 						}
 
 						ResizableArray<long long>* idxArray = search(*tempDR, *drillingArray, isSorted, *comparator);
@@ -568,7 +568,7 @@ int main() {
 	// Initializes the drilling list
 	drillingList = new OULinkedList<DrillingRecord>(new DrillingRecordComparator(1));
 	if (drillingList == NULL) {
-		throw ExceptionMemoryNotAvailable();
+		throw new ExceptionMemoryNotAvailable();
 	}
 
 	// Creates a temporary list for new data to be placed into
