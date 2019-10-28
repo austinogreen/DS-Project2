@@ -194,6 +194,7 @@ bool OULinkedList<T> :: replace(T item) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			prev->next = ouLink;
 			ouLink->next = current->next;
+			current->next = NULL;
 			delete current;
 			current = NULL;
 			return true;
@@ -241,6 +242,7 @@ bool OULinkedList<T> :: remove(T item) {
 	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			prev->next = current->next;
+			current->next = NULL;
 			delete current;
 			current = NULL;
 			// If the next item is null, prev is the last item

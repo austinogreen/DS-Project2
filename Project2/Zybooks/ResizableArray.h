@@ -29,6 +29,8 @@ public:
 };
 
 // Add your implementation below this line. Do not add or modify anything above this line.
+
+// Doubles capacity of array
 template<typename T>
 void ResizableArray<T> :: doubleCapacity(void) {
 	// Creats new type T array
@@ -64,6 +66,11 @@ void ResizableArray<T> :: halveCapacity(void) {
 	// Creates new type T array
 	T* newT = new T[capacity / 2];
 
+	// Checks if memeory is available	
+	if (newT == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 	// Copies contents of old array into the new one
 	for (unsigned int i = 0; i < size; i++) {
 		try {
@@ -88,12 +95,21 @@ template<typename T>
 ResizableArray<T> :: ResizableArray() {
 	// Creates new array of type T of default capacity
 	data = new T[DEFAULT_ARRAY_CAPACITY];
+	// Checks if memeory is available	
+	if (data == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 }
 
 template<typename T>
 ResizableArray<T> :: ResizableArray(unsigned long capacity) {
 	// Creates new array of type T of <capacity>
 	data = new T[capacity];
+	// Checks if memeory is available	
+	if (data == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 }
 
 template<typename T>
@@ -166,6 +182,11 @@ inline void ResizableArray<T> :: removeAt(unsigned long index) {
 
 	// Creates new array
 	T* temp = new T[capacity];
+
+	// Checks if memeory is available	
+	if (temp == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	// Creates an offset for the array
 	unsigned int offset = 0;

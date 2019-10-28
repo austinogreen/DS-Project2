@@ -18,62 +18,21 @@
 
 using namespace std;
 
+// Global Drilling Array and List
 ResizableArray<DrillingRecord>* drillingArray = NULL;
-OULinkedList<DrillingRecord>* drillingList = new OULinkedList<DrillingRecord>(new DrillingRecordComparator(1));
+OULinkedList<DrillingRecord>* drillingList = NULL;
 
 // string to dump bad data
 string garbage;
 
 // number of data lines read in
 int dataLines = 0;
+// number of valid entries
 int validEntries = 0;
-bool hasOpened = false;
-
-void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
-	//Array dne therfore merged array is only array
-	if (drillingArray == NULL) {
-		drillingArray = new ResizableArray<DrillingRecord>();
-
-		unsigned long size = newArray->getSize();
-		for (unsigned int i = 0; i < size; i++) {
-			drillingArray->add(newArray->get(i));
-		}
-	}
-	else {
-		// Size of the array
-		long unsigned int size = newArray->getSize();
-		for (long unsigned int i = 0; i < size; i++) {
-
-			bool isFound = false;
-			DrillingRecord dR = newArray->get(i);
-			DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
-
-			long unsigned int j = 0;
-
-			// Change to binary search
-			while ((!isFound) && (j < drillingArray->getSize())) {
-				// Checks to see if the times are the same
-				if ((comparator->compare(dR, drillingArray->get(j))) == 0) {
-					drillingArray->replaceAt(dR, j);
-					isFound = true;
-				}
-				
-				j++;
-			}
-
-			// Adds to the end if not found
-			if (!isFound) {
-				drillingArray->add(dR);
-			}
-		}
-	}
-
-	// Sorts older part of array
-	Sorter<DrillingRecord>::sort(*drillingArray, *(new DrillingRecordComparator(1)));
-}
 
 // The biggest desision here is whether or not to assume more that more items already exist in the list or not
 // This method assumes that there will be more new items in the list than not
+// This is O(n) were n is the number of items in the drillingList
 void mergeDrillingList(OULinkedList<DrillingRecord>* mergeList) {
 	OULinkedListEnumerator<DrillingRecord> enumerator = mergeList->enumerator();
 
@@ -100,6 +59,8 @@ void mergeDrillingList(OULinkedList<DrillingRecord>* mergeList) {
 	return;
 }
 
+// Gets rid of items in pergeList from drillingList
+// This is O(n) were n is the number of items in the drillingList
 void pergeDrillingList(OULinkedList<DrillingRecord>* pergeList) {
 	OULinkedListEnumerator<DrillingRecord> enumerator = pergeList->enumerator();
 
@@ -113,9 +74,18 @@ void pergeDrillingList(OULinkedList<DrillingRecord>* pergeList) {
 	return;
 }
 
+// Converts the list to an array
+// Arrays are better for searching and sorting
+// This is O(n) were n is the number of items in the drillingList
 void listToArray() {
 
+	// Deletes previous array and recreates it
+	delete drillingArray;
 	drillingArray = new ResizableArray<DrillingRecord>();
+
+	if (drillingArray == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	// Doesn't have any items
 	if (drillingList->getSize() == 0) {
@@ -126,12 +96,14 @@ void listToArray() {
 
 	// While there is a next item
 	while (enumerator.hasNext()) {
+		// Add the items to drillingArray
 		drillingArray->add(enumerator.next());
 	}
 
 	return;
 }
 
+// Reads a files based on a user input
 OULinkedList<DrillingRecord>* readFile() {
 	ifstream inputFile;
 
@@ -141,8 +113,16 @@ OULinkedList<DrillingRecord>* readFile() {
 	// Compares by column
 	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
 
-	OULinkedList<DrillingRecord>* tempList;
-	tempList = new OULinkedList<DrillingRecord>(comparator);
+	if (comparator == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
+	OULinkedList<DrillingRecord>* tempList = new OULinkedList<DrillingRecord>(comparator);
+	
+	if (tempList == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 
 
 	// Initial file name input
@@ -156,11 +136,13 @@ OULinkedList<DrillingRecord>* readFile() {
 
 	// Check if file exists
 	if (inputFile.is_open()) {
-		// If file exists
-		hasOpened = true;
 
 		// The drilling array
 		DrillingRecord* drillingRecord = new DrillingRecord();
+
+		if (drillingRecord== NULL) {
+			throw ExceptionMemoryNotAvailable();
+		}
 
 		// Temperary string variable
 		string tempString;
@@ -193,7 +175,7 @@ OULinkedList<DrillingRecord>* readFile() {
 				cout << "Non-matching date stamp " << tempString << " at line " << lineCount + 1 << "." << endl;
 				isValid = false;
 			}
-			if (isValid) {
+			else {
 				drillingRecord->addString(tempString);
 			}
 
@@ -239,6 +221,10 @@ OULinkedList<DrillingRecord>* readFile() {
 			else {
 				delete drillingRecord;
 				drillingRecord = new DrillingRecord();
+
+				if (drillingRecord == NULL) {
+					throw ExceptionMemoryNotAvailable();
+				}
 			}
 
 			// Get next date parameter
@@ -274,7 +260,7 @@ OULinkedList<DrillingRecord>* readFile() {
 
 void outputLoop(void) {
 	// if there is a valid input
-	if (hasOpened) {
+	if (validEntries > 0) {
 
 		// Output choice
 		char choice;
@@ -292,6 +278,10 @@ void outputLoop(void) {
 
 		// Temp Drilling Record
 		DrillingRecord* tempDR = new DrillingRecord();
+
+		if (tempDR == NULL) {
+			throw ExceptionMemoryNotAvailable();
+		}
 
 		listToArray();
 
@@ -387,6 +377,10 @@ void outputLoop(void) {
 
 						comparator = new DrillingRecordComparator(column);
 
+						if (comparator == NULL) {
+							throw ExceptionMemoryNotAvailable();
+						}
+
 						Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
 
 						sortedColumn = column;
@@ -428,6 +422,10 @@ void outputLoop(void) {
 
 						comparator = new DrillingRecordComparator(column);
 
+						if (comparator == NULL) {
+							throw ExceptionMemoryNotAvailable();
+						}
+
 						ResizableArray<long long>* idxArray = search(*tempDR, *drillingArray, isSorted, *comparator);
 
 						unsigned long count = idxArray->getSize();
@@ -454,11 +452,11 @@ void outputLoop(void) {
 
 					if (tempList != NULL) {
 						mergeDrillingList(tempList);
-					}
 
-					// Since changes have been made to list, need to repopulate the array
-					listToArray();
-					sortedColumn = 1;
+						// Since changes have been made to list, need to repopulate the array
+						listToArray();
+						sortedColumn = 1;
+					}
 
 					break;
 
@@ -468,11 +466,11 @@ void outputLoop(void) {
 
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
-					}
 
-					// Since changes have been made to list, need to repopulate the array
-					listToArray();
-					sortedColumn = 1;
+						// Since changes have been made to list, need to repopulate the array
+						listToArray();
+						sortedColumn = 1;
+					}
 
 					break;
 
@@ -564,12 +562,22 @@ void outputLoop(void) {
 	}
 }
 
+// Main function, this calls other functions in the Driller2 program
 int main() {
 
+	// Initializes the drilling list
+	drillingList = new OULinkedList<DrillingRecord>(new DrillingRecordComparator(1));
+	if (drillingList == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
+	// Creates a temporary list for new data to be placed into
 	OULinkedList<DrillingRecord>* tempList = NULL;
 
+	// Gets user input and places it into the list
 	tempList = readFile();
 
+	// if the list is not null, it has data and therefore needs to be merged
 	if (tempList != NULL) {
 		mergeDrillingList(tempList);
 	}
@@ -577,7 +585,8 @@ int main() {
 	// Goes into the user output loop
 	outputLoop();
 	
-	if (hasOpened) {
+	// Only thank if valid data was input
+	if (validEntries > 0) {
 		cout << "Thanks for using Driller." << endl;
 	}
 	return 0;

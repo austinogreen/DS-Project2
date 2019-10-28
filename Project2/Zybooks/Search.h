@@ -9,6 +9,7 @@
 
 // returns FIRST array location matching the given item (based on the comparator)
 // if not found, returns -(location to insert + 1)
+// Binary search per Zybooks
 template <typename T>
 long long binarySearch(const T& item, const ResizableArray<T>& array, const Comparator<T>& comparator) {
 	
@@ -49,6 +50,7 @@ long long binarySearch(const T& item, const ResizableArray<T>& array, const Comp
 	return -(middle + 1);
 }
 
+// Linear search for unsorted arrays
 template <typename T>
 ResizableArray<long long>* linearSearch(const T& item, const ResizableArray<T>& array, const Comparator<T>& comparator) {
 
@@ -62,14 +64,18 @@ ResizableArray<long long>* linearSearch(const T& item, const ResizableArray<T>& 
 	return idxArray;
 }
 
+// Base search
 template <typename T>
 ResizableArray<long long>* search(const T& item, const ResizableArray<T>& array, bool isSorted,  const Comparator<T>& comparator) {
 	
+	// Array of indexes
 	ResizableArray<long long>* idxArray = new ResizableArray<long long>();
 	
+	// if the list is sorted, can use binary search
 	if (isSorted) {
 		long long idx = binarySearch(item, array, comparator);
 
+		// gets index of first element matching
 		idxArray->add(idx);
 
 		// Searches indexes after the returned index to see if multiple items exist
@@ -81,6 +87,7 @@ ResizableArray<long long>* search(const T& item, const ResizableArray<T>& array,
 		return idxArray;
 	}
 
+	// If unsorted need to use linear
 	else {
 		return linearSearch(item, array, comparator);
 	}
