@@ -98,7 +98,7 @@ bool OULinkedList<T> :: insert(T item) {
 		return true;
 	}
 	OULink<T>* current = first;
-	OULink<T>* prev = NULL;
+	OULink<T>* prev = NULL; // temp item
 
 	// If the item is less than the first
 	if (comparator->compare(item, first->data) < 0) {
@@ -108,7 +108,7 @@ bool OULinkedList<T> :: insert(T item) {
 		return true;
 	}
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
 			return false;
 		}
@@ -122,11 +122,15 @@ bool OULinkedList<T> :: insert(T item) {
 		prev = current;
 		current = current->next;
 	}
-	current->next = ouLink;
-	ouLink->next = NULL;
-	last = ouLink;
-	size++;
-	return true;
+
+	// If greater than all, it is the last item
+	if (prev == last) {
+		prev->next = ouLink;
+		last = ouLink;
+		ouLink->next = NULL;
+		size++;
+		return true;
+	}
 }
 
 // if item is greater than item at last, append item at end and return true
@@ -143,9 +147,6 @@ bool OULinkedList<T> :: append(T item) {
 		size++;
 		return true;
 	}
-
-	OULink<T>* current = first;
-	OULink<T>* prev = NULL;
 	
 	if (comparator->compare(item, last.data) > 0) {
 		last->next = ouLink;
@@ -165,12 +166,15 @@ bool OULinkedList<T> :: replace(T item) {
 
 	OULink<T>* ouLink = new OULink<T>(item);
 
-	if (first == NULL) {
-		return false;
-	}
-
 	OULink<T>* current = first;
 	OULink<T>* prev = NULL;
+
+	if ((comparator->compare(item, first->data) == 0)) {
+		ouLink->next = first->next;
+		first = ouLink;
+		delete current;
+		return true;
+	}
 
 	while (!(current->next == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
@@ -192,7 +196,7 @@ bool OULinkedList<T> :: replace(T item) {
 template <typename T>
 bool OULinkedList<T> :: remove(T item) {
 
-	OULink<T>* ouLink = new OULink<T>(item);
+	OULink<T>* temp = new OULink<T>(item); // Temp item
 
 	if (first == NULL) {
 		return false;
@@ -200,18 +204,28 @@ bool OULinkedList<T> :: remove(T item) {
 
 	// If the item is the first
 	if (comparator->compare(item, first->data) == 0) {
-		first = first->next;
+		temp = first->next;
+		first = temp;
 		size--;
+		// if the first item in NULL the last one should be too
+		if (first = NULL) {
+			delete last;
+			last = NULL;
+		}
 		return true;
 	}
 
 	OULink<T>* current = first;
-	OULink<T>* prev = NULL;
+	OULink<T>* prev = new OULink<T>(item); // temp item
 
-	while (!(current->next == NULL)) {
+	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
 			prev->next = current->next;
 			delete current;
+			// If the next item is null, prev is the last item
+			if (prev->next == NULL) {
+				last = prev;
+			}
 			size--;
 			return true;
 		}
@@ -278,7 +292,7 @@ bool OULinkedList<T> :: contains(T item) const {
 	}
 
 	OULink<T>* current = first;
-	OULink<T>* prev = NULL;
+	OULink<T>* prev = new OULink<T>(item); // temp item
 
 	while (!(current->next == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
@@ -304,7 +318,7 @@ T OULinkedList<T> :: find(T item) const {
 	}
 
 	OULink<T>* current = first;
-	OULink<T>* prev = NULL;
+	OULink<T>* prev = new OULink<T>(NULL); // temp item
 
 	while (!(current->next == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
@@ -358,7 +372,7 @@ unsigned long OULinkedList<T> :: getSize() const {
 // create an enumerator for this linked list
 template <typename T>
 OULinkedListEnumerator<T> OULinkedList<T> :: enumerator() const {
-	return new OULinkedListEnumerator(first);
+	return OULinkedListEnumerator<T>(first);
 }
 
 #endif // !OU_LINKED_LIST

@@ -79,21 +79,36 @@ void mergeDrillingList(OULinkedList<DrillingRecord>* tempList) {
 
 	bool hasInserted = false;
 
+	// if empty exit
+	if (tempList->getSize() == 0) {
+		return;
+	}
+
 	// While there is a next item
 	while (enumerator.hasNext()) {
+		DrillingRecord tempDR = enumerator.next();
 		// Try to insert an item
 		// Returns false if item already inserted
-		hasInserted = drillingList->insert(enumerator.peek());
+		hasInserted = drillingList->insert(tempDR);
 		// If the item wasn't inserted it already exists
 		// Then replace
 		if (!hasInserted) {
-			drillingList->replace(enumerator.next());
-		}
-		// Go to next item
-		else {
-			enumerator.next();
+			drillingList->replace(tempDR);
 		}
 	}
+
+	// Last item
+	DrillingRecord tempDR = enumerator.next();
+
+	// Try to insert an item
+	// Returns false if item already inserted
+	hasInserted = drillingList->insert(tempDR);
+	// If the item wasn't inserted it already exists
+	// Then replace
+	if (!hasInserted) {
+		drillingList->replace(tempDR);
+	}
+
 	return;
 }
 
@@ -125,6 +140,9 @@ void listToArray() {
 	while (enumerator.hasNext()) {
 		drillingArray->add(enumerator.next());
 	}
+
+	// Last Item
+	drillingArray->add(enumerator.next());
 
 	return;
 }
@@ -429,7 +447,7 @@ void outputLoop(void) {
 					break;
 
 				case 'm':
-					cout << "Enter data file name: " << endl;
+					cout << "Enter data file name: ";
 
 					getline(cin, fileName);
 
@@ -446,7 +464,7 @@ void outputLoop(void) {
 					break;
 
 				case 'p':
-					cout << "Enter data file name: " << endl;
+					cout << "Enter data file name: ";
 
 					getline(cin, fileName);
 
@@ -492,6 +510,11 @@ void outputLoop(void) {
 								outputFile << enumerator.next() << endl;
 							}
 
+							// If there are any items, print remaining one after while loop
+							if (drillingList->getSize() != 0) {
+								outputFile << enumerator.next() << endl;
+							}
+
 							// Outputs internal tallies
 							outputFile << "Data lines read: " << dataLines
 								<< "; Valid drilling records read: " << validEntries
@@ -512,6 +535,11 @@ void outputLoop(void) {
 								cout << enumerator.next() << endl;
 							}
 
+							// If there are any items, print remaining one after while loop
+							if (drillingList->getSize() != 0) {
+								cout << enumerator.next() << endl;
+							}
+
 							// Outputs internal tallies
 							cout << "Data lines read: " << dataLines
 								<< "; Valid drilling records read: " << validEntries
@@ -527,7 +555,7 @@ void outputLoop(void) {
 			}
 
 			cout << "Enter (o)utput, (s)ort, (f)ind, (m)erge, (p)urge, (r)ecords, or (q)uit: " << endl;
-			cin >> choice;
+				cin >> choice;
 			getline(cin, garbage);
 		}
 	}

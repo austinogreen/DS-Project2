@@ -38,7 +38,7 @@ bool OULinkedListEnumerator<T>::hasNext() const {
 // throws ExceptionEnumerationBeyondEnd if no next item is available
 template<typename T>
 T OULinkedListEnumerator<T>::next() {
-	if (hasNext() == false) {
+	if (current == NULL) {
 		throw ExceptionEnumerationBeyondEnd();
 	}
 
@@ -53,7 +53,7 @@ T OULinkedListEnumerator<T>::next() {
 // throws ExceptionEnumerationBeyondEnd if no next item is available
 template<typename T>
 T OULinkedListEnumerator<T>::peek() const {
-	if (hasNext() == false) {
+	if (current == NULL) {
 		throw ExceptionEnumerationBeyondEnd();
 	}
 
