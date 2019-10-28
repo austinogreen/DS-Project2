@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Driller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DrillingRecord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DrillingRecordComparator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Driller2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

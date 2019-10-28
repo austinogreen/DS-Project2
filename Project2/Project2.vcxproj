@@ -123,7 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Driller.cpp" />
+    <ClCompile Include="Driller2.cpp" />
     <ClCompile Include="DrillingRecord.cpp" />
     <ClCompile Include="DrillingRecordComparator.cpp" />
   </ItemGroup>
