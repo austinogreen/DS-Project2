@@ -300,7 +300,7 @@ void outputLoop(void) {
 					if (changed) {
 						listToArray();
 						sortedColumn = 1;
-						changed = false
+						changed = false;
 					}
 
 					// Checks for file to output to
@@ -365,7 +365,7 @@ void outputLoop(void) {
 					if (changed) {
 						listToArray();
 						sortedColumn = 1;
-						changed = false
+						changed = false;
 					}
 					// sort stuff
 					// column to sort
@@ -409,7 +409,7 @@ void outputLoop(void) {
 					if (changed) {
 						listToArray();
 						sortedColumn = 1;
-						changed = false
+						changed = false;
 					}
 					// Get column to search
 					cout << "Enter search field (0-17): ";
