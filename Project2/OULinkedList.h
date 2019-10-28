@@ -82,6 +82,7 @@ OULinkedList<T> :: ~OULinkedList() {
 
 // if an equivalent item is not already present, insert item in order and return true
 // if an equivalent item is already present, leave list unchanged and return false
+// This is O(n) were n is the number of items in the List
 template <typename T>
 bool OULinkedList<T> :: insert(T item) {
 
@@ -137,6 +138,7 @@ bool OULinkedList<T> :: insert(T item) {
 
 // if item is greater than item at last, append item at end and return true
 // if item is less than or equal to item at last, leave list unchanged and return false
+// This is O(1) because only checks two items
 template <typename T>
 bool OULinkedList<T> :: append(T item) {
 
@@ -167,6 +169,7 @@ bool OULinkedList<T> :: append(T item) {
 
 // if an equivalent item is already present, replace item and return true
 // if an equivalent item is not already present, leave list unchanged and return false
+// This is O(n) were n is the number of items in the list
 template <typename T>
 bool OULinkedList<T> :: replace(T item) {
 
@@ -183,6 +186,7 @@ bool OULinkedList<T> :: replace(T item) {
 		ouLink->next = first->next;
 		first = ouLink;
 		delete current;
+		current = NULL;
 		return true;
 	}
 
@@ -191,6 +195,7 @@ bool OULinkedList<T> :: replace(T item) {
 			prev->next = ouLink;
 			ouLink->next = current->next;
 			delete current;
+			current = NULL;
 			return true;
 		}
 
@@ -203,6 +208,7 @@ bool OULinkedList<T> :: replace(T item) {
 
 // if an equivalent item is already present, remove item and return true
 // if an equivalent item is not already present, leave list unchanged and return false
+// This is O(n) were n is the number of items in the list
 template <typename T>
 bool OULinkedList<T> :: remove(T item) {
 
@@ -236,6 +242,7 @@ bool OULinkedList<T> :: remove(T item) {
 		if ((comparator->compare(item, current->data) == 0)){
 			prev->next = current->next;
 			delete current;
+			current = NULL;
 			// If the next item is null, prev is the last item
 			if (prev->next == NULL) {
 				last = prev;
@@ -296,6 +303,7 @@ bool OULinkedList<T> :: removeFirst() {
 
 // if an equivalent item is present, return true
 // if an equivalent item is not present, false
+// This is O(n) were n is the number of items in the list
 template <typename T>
 bool OULinkedList<T> :: contains(T item) const {
 
@@ -313,6 +321,7 @@ bool OULinkedList<T> :: contains(T item) const {
 
 // if an equivalent item is present, return a copy of that item
 // if an equivalent item is not present, throw a new ExceptionLinkedListAccess
+// This is O(n) were n is the number of items in the list
 template <typename T>
 T OULinkedList<T> :: find(T item) const {
 
@@ -329,6 +338,7 @@ T OULinkedList<T> :: find(T item) const {
 }
 
 // deletes all links in the list, resets size to 0
+// This is O(n) were n is the number of items in the list
 template <typename T>
 void OULinkedList<T> :: clear() {
 	if (first == NULL) {
@@ -336,8 +346,9 @@ void OULinkedList<T> :: clear() {
 		return;
 	}
 
-	// Deletes remaining current
+	// Will recursevey delete all elements based on deconstructor
 	delete first;
+	first = NULL;
 
 	size = 0;
 
