@@ -87,6 +87,10 @@ bool OULinkedList<T> :: insert(T item) {
 
 	OULink<T>* ouLink = new OULink<T>(item);
 
+	if (ouLink == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 	if (first == NULL) {
 		first = ouLink;
 		last = ouLink;
@@ -138,6 +142,10 @@ bool OULinkedList<T> :: append(T item) {
 
 	OULink<T>* ouLink = new OULink<T>(item);
 
+	if (ouLink == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 	if (first == NULL) {
 		first = ouLink;
 		last = ouLink;
@@ -163,6 +171,10 @@ template <typename T>
 bool OULinkedList<T> :: replace(T item) {
 
 	OULink<T>* ouLink = new OULink<T>(item);
+
+	if (ouLink == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	OULink<T>* current = first;
 	OULink<T>* prev = NULL;
@@ -215,6 +227,10 @@ bool OULinkedList<T> :: remove(T item) {
 
 	OULink<T>* current = first;
 	OULink<T>* prev = new OULink<T>(item); // temp item
+
+	if (prev == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	while (!(current == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)){
