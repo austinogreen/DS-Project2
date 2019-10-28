@@ -183,8 +183,9 @@ bool OULinkedList<T> :: replace(T item) {
 	OULink<T>* prev = NULL;
 
 	if ((comparator->compare(item, first->data) == 0)) {
-		ouLink->next = first->next;
+		ouLink->next = current->next;
 		first = ouLink;
+		current->next = NULL;
 		delete current;
 		current = NULL;
 		return true;

@@ -271,6 +271,9 @@ void outputLoop(void) {
 		// Column the data is currently sorted by
 		int sortedColumn = 1;
 
+		// This flag sets weather or not the array needs to be updated because changes have been made to the list
+		bool changed = false;
+
 		OULinkedList<DrillingRecord>* tempList = NULL;
 
 		// comparator
@@ -293,6 +296,13 @@ void outputLoop(void) {
 		while (choice != 'q') {
 			switch (choice) {
 				case 'o':
+					// If the list has been updated since last array transfer
+					if (changed) {
+						listToArray();
+						sortedColumn = 1;
+						changed = false
+					}
+
 					// Checks for file to output to
 					cout << "Enter output file name: ";
 					getline(cin, fileName);
@@ -351,6 +361,12 @@ void outputLoop(void) {
 					}
 					break;
 				case 's':
+					// If the list has been updated since last array transfer
+					if (changed) {
+						listToArray();
+						sortedColumn = 1;
+						changed = false
+					}
 					// sort stuff
 					// column to sort
 					int column;
@@ -389,6 +405,12 @@ void outputLoop(void) {
 					break;
 
 				case 'f': {
+					// If the list has been updated since last array transfer
+					if (changed) {
+						listToArray();
+						sortedColumn = 1;
+						changed = false
+					}
 					// Get column to search
 					cout << "Enter search field (0-17): ";
 					cin >> column;
@@ -453,9 +475,8 @@ void outputLoop(void) {
 					if (tempList != NULL) {
 						mergeDrillingList(tempList);
 
-						// Since changes have been made to list, need to repopulate the array
-						listToArray();
-						sortedColumn = 1;
+						// Set flag to update array if something is to be done with it
+						changed = true;
 					}
 
 					break;
@@ -467,9 +488,8 @@ void outputLoop(void) {
 					if (tempList != NULL) {
 						pergeDrillingList(tempList);
 
-						// Since changes have been made to list, need to repopulate the array
-						listToArray();
-						sortedColumn = 1;
+						// Set flag to update array if something is to be done with it
+						changed = true;
 					}
 
 					break;
