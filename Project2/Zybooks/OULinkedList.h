@@ -148,7 +148,7 @@ bool OULinkedList<T> :: append(T item) {
 		return true;
 	}
 	
-	if (comparator->compare(item, last.data) > 0) {
+	if (comparator->compare(item, last->data) > 0) {
 		last->next = ouLink;
 		last = ouLink;
 		ouLink->next = NULL;
@@ -306,18 +306,16 @@ bool OULinkedList<T> :: contains(T item) const {
 template <typename T>
 T OULinkedList<T> :: find(T item) const {
 
-	OULink<T>* ouLink = new OULink<T>(item);
-
 	if (first == NULL) {
 		throw ExceptionLinkedListAccess();
 	}
 
 	OULink<T>* current = first;
-	OULink<T>* prev = new OULink<T>(NULL); // temp item
+	OULink<T>* prev = new OULink<T>(item); // temp item
 
 	while (!(current->next == NULL)) {
 		if ((comparator->compare(item, current->data) == 0)) {
-			return current;
+			return current->data;
 		}
 
 		prev = current;

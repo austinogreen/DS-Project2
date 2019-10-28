@@ -596,19 +596,10 @@ int main() {
 
 	getline(cin, fileName);
 
-	// Input loop
-	while (!(fileName.empty())) {
+	tempList = readFile(fileName);
 
-		tempList = readFile(fileName);
-
-		if (tempList != NULL) {
-			mergeDrillingList(tempList);
-		}
-		
-		// Re-get file name
-		cout << "Enter data file name: ";
-
-		getline(cin, fileName);
+	if (tempList != NULL) {
+		mergeDrillingList(tempList);
 	}
 
 	// Goes into the user output loop
