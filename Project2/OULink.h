@@ -24,6 +24,7 @@ OULink<T>::OULink(T item) {
 
 template<typename T>
 OULink<T>::~OULink() {
+	delete next;
 }
 
 #endif // !OU_LINK

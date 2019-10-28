@@ -78,8 +78,6 @@ OULinkedList<T> :: ~OULinkedList() {
 	size = 0;
 	first = NULL;
 	last = NULL;
-
-
 }
 
 // if an equivalent item is not already present, insert item in order and return true
@@ -285,10 +283,6 @@ bool OULinkedList<T> :: removeFirst() {
 template <typename T>
 bool OULinkedList<T> :: contains(T item) const {
 
-	if (first == NULL) {
-		return false;
-	}
-
 	OULink<T>* current = first; // current item
 
 	while (!(current == NULL)) {
@@ -305,10 +299,6 @@ bool OULinkedList<T> :: contains(T item) const {
 // if an equivalent item is not present, throw a new ExceptionLinkedListAccess
 template <typename T>
 T OULinkedList<T> :: find(T item) const {
-
-	if (first == NULL) {
-		throw ExceptionLinkedListAccess();
-	}
 
 	OULink<T>* current = first;
 

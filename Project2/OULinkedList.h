@@ -320,25 +320,10 @@ void OULinkedList<T> :: clear() {
 		return;
 	}
 
-	OULink<T> current = first;
-	OULink<T> temp;
-
-	// While a next item exists
-	while (!(current == NULL)) {
-		// Stores next item
-		temp = current->next;
-		// Deletes item
-		delete current;
-		// Stores next item in current
-		current = temp;
-	}
-
 	// Deletes remaining current
-	delete current;
+	delete first;
 
 	size = 0;
-	first = NULL;
-	last = NULL;
 
 	return;
 }

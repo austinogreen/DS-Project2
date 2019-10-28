@@ -19,7 +19,7 @@
 using namespace std;
 
 ResizableArray<DrillingRecord>* drillingArray = NULL;
-OULinkedList<DrillingRecord>* drillingList = new OULinkedList<DrillingRecord>(new DrillingRecordComparator(1));
+OULinkedList<DrillingRecord>* drillingList = NULL;
 
 // string to dump bad data
 string garbage;
@@ -34,6 +34,10 @@ void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
 	if (drillingArray == NULL) {
 		drillingArray = new ResizableArray<DrillingRecord>();
 
+		if (drillingArray == NULL) {
+			throw ExceptionMemoryNotAvailable();
+		}
+
 		unsigned long size = newArray->getSize();
 		for (unsigned int i = 0; i < size; i++) {
 			drillingArray->add(newArray->get(i));
@@ -47,6 +51,14 @@ void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
 			bool isFound = false;
 			DrillingRecord dR = newArray->get(i);
 			DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
+
+			if (comparator == NULL) {
+				throw ExceptionMemoryNotAvailable();
+			}
+
+			if (comparator == NULL) {
+				throw ExceptionMemoryNotAvailable();
+			}
 
 			long unsigned int j = 0;
 
@@ -69,7 +81,13 @@ void mergeDrillingArray(ResizableArray<DrillingRecord>* newArray) {
 	}
 
 	// Sorts older part of array
-	Sorter<DrillingRecord>::sort(*drillingArray, *(new DrillingRecordComparator(1)));
+	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
+
+	if (comparator == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
+	Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
 }
 
 // The biggest desision here is whether or not to assume more that more items already exist in the list or not
@@ -115,7 +133,12 @@ void pergeDrillingList(OULinkedList<DrillingRecord>* pergeList) {
 
 void listToArray() {
 
+	delete drillingArray;
 	drillingArray = new ResizableArray<DrillingRecord>();
+
+	if (drillingArray == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	// Doesn't have any items
 	if (drillingList->getSize() == 0) {
@@ -141,8 +164,16 @@ OULinkedList<DrillingRecord>* readFile() {
 	// Compares by column
 	DrillingRecordComparator* comparator = new DrillingRecordComparator(1);
 
-	OULinkedList<DrillingRecord>* tempList;
-	tempList = new OULinkedList<DrillingRecord>(comparator);
+	if (comparator == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
+	OULinkedList<DrillingRecord>* tempList = new OULinkedList<DrillingRecord>(comparator);
+	
+	if (tempList == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
+
 
 
 	// Initial file name input
@@ -161,6 +192,10 @@ OULinkedList<DrillingRecord>* readFile() {
 
 		// The drilling array
 		DrillingRecord* drillingRecord = new DrillingRecord();
+
+		if (drillingRecord== NULL) {
+			throw ExceptionMemoryNotAvailable();
+		}
 
 		// Temperary string variable
 		string tempString;
@@ -239,6 +274,10 @@ OULinkedList<DrillingRecord>* readFile() {
 			else {
 				delete drillingRecord;
 				drillingRecord = new DrillingRecord();
+
+				if (drillingRecord == NULL) {
+					throw ExceptionMemoryNotAvailable();
+				}
 			}
 
 			// Get next date parameter
@@ -292,6 +331,10 @@ void outputLoop(void) {
 
 		// Temp Drilling Record
 		DrillingRecord* tempDR = new DrillingRecord();
+
+		if (tempDR == NULL) {
+			throw ExceptionMemoryNotAvailable();
+		}
 
 		listToArray();
 
@@ -387,6 +430,10 @@ void outputLoop(void) {
 
 						comparator = new DrillingRecordComparator(column);
 
+						if (comparator == NULL) {
+							throw ExceptionMemoryNotAvailable();
+						}
+
 						Sorter<DrillingRecord>::sort(*drillingArray, *comparator);
 
 						sortedColumn = column;
@@ -427,6 +474,10 @@ void outputLoop(void) {
 						}
 
 						comparator = new DrillingRecordComparator(column);
+
+						if (comparator == NULL) {
+							throw ExceptionMemoryNotAvailable();
+						}
 
 						ResizableArray<long long>* idxArray = search(*tempDR, *drillingArray, isSorted, *comparator);
 
@@ -565,6 +616,11 @@ void outputLoop(void) {
 }
 
 int main() {
+
+	drillingList = new OULinkedList<DrillingRecord>(new DrillingRecordComparator(1));
+	if (drillingList == NULL) {
+		throw ExceptionMemoryNotAvailable();
+	}
 
 	OULinkedList<DrillingRecord>* tempList = NULL;
 
